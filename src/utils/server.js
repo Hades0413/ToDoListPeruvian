@@ -18,18 +18,49 @@ app.post("/register", async (req, res) => {
   }
 
   try {
-    // Insertar el nuevo usuario en la base de datos
-    await db.query(
-      "INSERT INTO usuario (nombre_usuario, email_usuario, contrasena_usuario) VALUES (?, ?, ?)",
-      [nombre_usuario, email_usuario, contrasena_usuario],
+    // Verificar si el correo ya existe
+    db.query(
+      "SELECT * FROM usuario WHERE email_usuario = ? OR nombre_usuario = ?",
+      [email_usuario, nombre_usuario],
       (err, result) => {
         if (err) {
-          console.error("Error al registrar usuario:", err);
+          console.error("Error al verificar el correo o el nombre:", err);
           return res
             .status(500)
-            .json({ error: "Hubo un error al registrar al usuario" });
+            .json({ error: "Hubo un error al verificar los datos." });
         }
-        res.status(201).json({ message: "Usuario registrado con éxito" });
+
+        if (result.length > 0) {
+          const existingEmail = result.find(user => user.email_usuario === email_usuario);
+          const existingUsername = result.find(user => user.nombre_usuario === nombre_usuario);
+
+          if (existingEmail) {
+            return res
+              .status(409)
+              .json({ error: "El correo electrónico ya está registrado." });
+          }
+
+          if (existingUsername) {
+            return res
+              .status(409)
+              .json({ error: "El nombre de usuario ya está registrado." });
+          }
+        }
+
+        // Insertar el nuevo usuario en la base de datos
+        db.query(
+          "INSERT INTO usuario (nombre_usuario, email_usuario, contrasena_usuario) VALUES (?, ?, ?)",
+          [nombre_usuario, email_usuario, contrasena_usuario],
+          (err, result) => {
+            if (err) {
+              console.error("Error al registrar usuario:", err);
+              return res
+                .status(500)
+                .json({ error: "Hubo un error al registrar al usuario" });
+            }
+            res.status(201).json({ message: "Usuario registrado con éxito" });
+          }
+        );
       }
     );
   } catch (err) {
@@ -69,7 +100,7 @@ app.post("/login", (req, res) => {
 
     const user = result[0];
 
-    // Compara las contraseñas sin cifrado (solo compara los valores directamente)
+    // Compara las contraseñas sin cifrado
     if (password !== user.contrasena_usuario) {
       // Si las contraseñas no coinciden
       return res

@@ -17,7 +17,6 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar campos
     if (!nombre || !correoElectronico || !contrasena) {
       Swal.fire({
         title: "Error",
@@ -30,14 +29,12 @@ const Register: React.FC = () => {
     }
 
     try {
-      // Realizar la solicitud al backend
       const response = await axios.post("http://localhost:5000/register", {
         nombre_usuario: nombre,
         email_usuario: correoElectronico,
         contrasena_usuario: contrasena,
       });
 
-      // Manejar el éxito del registro
       if (response.status === 201) {
         Swal.fire({
           title: "¡Éxito!",
@@ -46,16 +43,34 @@ const Register: React.FC = () => {
           background: "#333",
           color: "#fff",
         }).then(() => {
-          navigate("/"); // Redirigir al usuario
+          navigate("/"); // Redirigir al login o página principal
         });
       }
     } catch (err: any) {
-      // Manejo específico para correo electrónico duplicado
-      if (err.response && err.response.status === 409) { // 409 Conflict
+      // Manejo de diferentes tipos de errores
+      if (err.response && err.response.status === 409) {
+        if (err.response.data.error.includes("correo electrónico")) {
+          Swal.fire({
+            title: "Advertencia",
+            text: "El correo electrónico ya está registrado. Intenta con otro.",
+            icon: "warning",
+            background: "#333",
+            color: "#fff",
+          });
+        } else if (err.response.data.error.includes("nombre de usuario")) {
+          Swal.fire({
+            title: "Advertencia",
+            text: "El nombre de usuario ya está registrado. Intenta con otro.",
+            icon: "warning",
+            background: "#333",
+            color: "#fff",
+          });
+        }
+      } else if (err.response && err.response.status === 400) {
         Swal.fire({
-          title: "Advertencia",
-          text: "El correo electrónico ya está registrado. Intenta con otro.",
-          icon: "warning",
+          title: "Error",
+          text: "Todos los campos son obligatorios.",
+          icon: "error",
           background: "#333",
           color: "#fff",
         });
@@ -68,7 +83,6 @@ const Register: React.FC = () => {
           color: "#fff",
         });
       }
-      console.error("Error al registrar usuario:", err);
     }
   };
 
