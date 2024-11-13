@@ -1,40 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../css/AuthForm.css";
+import authFormImg from "../assets/img/authFormImg.jpg";
+import FaLock from "../components/icons/FaLock";
+import FaEnvelope from "../components/icons/FaEnvelope";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
-  // Función para manejar el inicio de sesión
+  // Cargar el email guardado desde localStorage cuando el componente se monte
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      // Enviar la solicitud al servidor (asegurándose de que el puerto es 5000)
       const response = await axios.post("http://localhost:5000/login", {
         email,
         password,
       });
 
       if (response.data.success) {
-        // Si la respuesta es exitosa, muestra un mensaje de éxito y redirige
+        // Guardar el email en localStorage si el usuario seleccionó "Recuérdame"
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", email);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
+
         Swal.fire({
           title: "¡Éxito!",
           text: "Has iniciado sesión correctamente.",
           icon: "success",
+          background: "#333",
+          color: "#fff",
         }).then(() => {
-          // Redirige al home.tsx
           navigate("/home");
         });
       } else {
-        // Si la autenticación falla, muestra un mensaje de error
         Swal.fire({
           title: "Error",
           text: response.data.message,
           icon: "error",
+          background: "#333",
+          color: "#fff",
         });
       }
     } catch (error) {
@@ -43,86 +63,67 @@ export default function LoginForm() {
         title: "Error",
         text: "Hubo un error al intentar iniciar sesión.",
         icon: "error",
+        background: "#333",
+        color: "#fff",
       });
     }
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(to right, #8b5cf6, #7c3aed)",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "400px",
-          backgroundColor: "white",
-          borderRadius: "8px",
-          padding: "24px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h2
-          style={{
-            fontSize: "24px",
-            fontWeight: "bold",
-            textAlign: "center",
-            marginBottom: "24px",
-          }}
-        >
-          Bienvenido de vuelta
-        </h2>
-        <form style={{ marginBottom: "24px" }} onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="tu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              marginBottom: "12px",
-              border: "1px solid #d1d5db",
-              borderRadius: "4px",
-              color: "#000",
-            }}
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              marginBottom: "12px",
-              border: "1px solid #d1d5db",
-              borderRadius: "4px",
-              color: "#000",
-            }}
-          />
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              backgroundColor: "#4f46e5",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          >
-            Iniciar sesión
-          </button>
-        </form>
+    <div className="auth-container">
+      <div className="auth-content">
+        <div
+          className="auth-image"
+          style={{ backgroundImage: `url(${authFormImg})` }}
+        ></div>
+        <div className="auth-form">
+          <h2 className="auth-title">Bienvenido de vuelta</h2>
+          <form onSubmit={handleLogin}>
+            <div className="input-group">
+              <FaEnvelope className="input-icon" />
+              <input
+                id="email"
+                type="email"
+                className="auth-input"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <FaLock className="input-icon" />
+              <input
+                id="password"
+                type="password"
+                className="auth-input"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="auth-options">
+              <label className="remember-me">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />{" "}
+                Recuérdame
+              </label>
+              {/* <a href="/forgot-password" className="forgot-password">
+                ¿Olvidaste tu contraseña?
+              </a> */}
+            </div>
+            <button type="submit" className="auth-button">
+              Iniciar sesión
+            </button>
+          </form>
+          <a href="/register" className="auth-link">
+            ¿No tienes una cuenta? Regístrate
+          </a>
+        </div>
       </div>
     </div>
   );
