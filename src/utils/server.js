@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { db } from "./db.js"; // Asegúrate de tener tu archivo de conexión a DB
+import { db } from "./db.js";
+import bcrypt from "bcryptjs"; 
 
 const app = express();
 const port = 5000;
@@ -47,20 +48,30 @@ app.post("/register", async (req, res) => {
           }
         }
 
-        // Insertar el nuevo usuario en la base de datos
-        db.query(
-          "INSERT INTO usuario (nombre_usuario, email_usuario, contrasena_usuario) VALUES (?, ?, ?)",
-          [nombre_usuario, email_usuario, contrasena_usuario],
-          (err, result) => {
-            if (err) {
-              console.error("Error al registrar usuario:", err);
-              return res
-                .status(500)
-                .json({ error: "Hubo un error al registrar al usuario" });
-            }
-            res.status(201).json({ message: "Usuario registrado con éxito" });
+        // Cifrar la contraseña
+        bcrypt.hash(contrasena_usuario, 10, (err, hashedPassword) => {
+          if (err) {
+            console.error("Error al cifrar la contraseña:", err);
+            return res.status(500).json({
+              error: "Hubo un error al cifrar la contraseña.",
+            });
           }
-        );
+
+          // Insertar el nuevo usuario con la contraseña cifrada
+          db.query(
+            "INSERT INTO usuario (nombre_usuario, email_usuario, contrasena_usuario) VALUES (?, ?, ?)",
+            [nombre_usuario, email_usuario, hashedPassword],
+            (err, result) => {
+              if (err) {
+                console.error("Error al registrar usuario:", err);
+                return res
+                  .status(500)
+                  .json({ error: "Hubo un error al registrar al usuario" });
+              }
+              res.status(201).json({ message: "Usuario registrado con éxito" });
+            }
+          );
+        });
       }
     );
   } catch (err) {
@@ -100,18 +111,28 @@ app.post("/login", (req, res) => {
 
     const user = result[0];
 
-    // Compara las contraseñas sin cifrado
-    if (password !== user.contrasena_usuario) {
-      // Si las contraseñas no coinciden
-      return res
-        .status(400)
-        .json({ success: false, message: "Contraseña incorrecta." });
-    }
+    // Compara la contraseña ingresada con la contraseña cifrada
+    bcrypt.compare(password, user.contrasena_usuario, (err, isMatch) => {
+      if (err) {
+        console.error("Error al comparar las contraseñas:", err);
+        return res.status(500).json({
+          success: false,
+          message: "Hubo un error al intentar verificar la contraseña.",
+        });
+      }
 
-    // Si las credenciales son correctas
-    res
-      .status(200)
-      .json({ success: true, message: "Inicio de sesión exitoso." });
+      if (!isMatch) {
+        // Si las contraseñas no coinciden
+        return res
+          .status(400)
+          .json({ success: false, message: "Contraseña incorrecta." });
+      }
+
+      // Si las credenciales son correctas
+      res
+        .status(200)
+        .json({ success: true, message: "Inicio de sesión exitoso." });
+    });
   });
 });
 

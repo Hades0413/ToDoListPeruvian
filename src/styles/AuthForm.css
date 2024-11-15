@@ -1,18 +1,29 @@
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .auth-container {
@@ -60,8 +71,38 @@ body, html {
 .input-group {
   position: relative;
   margin-bottom: 1.5rem;
+  transition: margin-bottom 0.3s ease;
 }
 
+.input-group.error {
+  margin-bottom: 2.5rem;
+}
+
+.error-message {
+  position: absolute;
+  bottom: -33px;
+  left: 0;
+  width: 96%;
+  background-color: rgb(178, 27, 0);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(10px);
+}
+
+.input-group.error .error-message {
+  opacity: 1;
+  transform: translateY(0);
+}
+.error-message::before {
+  content: "⚠️";
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
 .input-icon {
   position: absolute;
   left: 15px;
@@ -168,9 +209,9 @@ body, html {
 }
 
 @media (min-width: 768px) {
-    .auth-input{
-        width: 87%;
-    }
+  .auth-input {
+    width: 87%;
+  }
   .auth-image {
     display: block;
   }
@@ -180,11 +221,11 @@ body, html {
   .auth-content {
     max-width: 400px;
   }
-  
+
   .auth-form {
     padding: 2rem;
   }
-  
+
   .auth-title {
     font-size: 1.75rem;
   }
