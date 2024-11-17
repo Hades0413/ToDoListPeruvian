@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../../styles/Sidebar.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../../styles/Sidebar.css";
 
 // Importa los iconos como componentes
-import PlusIcon from '../../components/icons/PlusIcon';
-import SearchIcon from '../../components/icons/SearchIcon';
-import InboxIcon from '../../components/icons/InboxIcon';
-import TodayIcon from '../../components/icons/TodayIcon';
-import NextIcon from '../../components/icons/NextIcon';
-import FiltersIcon from '../../components/icons/FiltersIcon';
-import ArrowIcon from '../../components/icons/ArrowIcon';
-import HashIcon from '../../components/icons/HashIcon';
-import StarIcon from '../../components/icons/StarIcon';
-import TemplateIcon from '../../components/icons/TemplateIcon';
-import BellIcon from '../../components/icons/BellIcon';
-import MenuIcon from '../../components/icons/MenuIcon';
+import PlusIcon from "../../components/icons/PlusIcon";
+import SearchIcon from "../../components/icons/SearchIcon";
+import InboxIcon from "../../components/icons/InboxIcon";
+import TodayIcon from "../../components/icons/TodayIcon";
+import NextIcon from "../../components/icons/NextIcon";
+import FiltersIcon from "../../components/icons/FiltersIcon";
+import ArrowIcon from "../../components/icons/ArrowIcon";
+import HashIcon from "../../components/icons/HashIcon";
+import StarIcon from "../../components/icons/StarIcon";
+import TemplateIcon from "../../components/icons/TemplateIcon";
+import BellIcon from "../../components/icons/BellIcon";
+import MenuIcon from "../../components/icons/MenuIcon";
 
 interface SidebarProps {
   onSidebarToggle: (isOpen: boolean) => void;
@@ -23,7 +23,20 @@ interface SidebarProps {
 export default function Sidebar({ onSidebarToggle }: SidebarProps) {
   const [isProjectsOpen, setIsProjectsOpen] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [userLogin, setUserLogin] = useState<string>("");
+  const [userInitial, setUserInitial] = useState<string>("");
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Obtener el valor del login guardado en localStorage
+    const storedLogin = localStorage.getItem("userLogin");
+    if (storedLogin) {
+      setUserLogin(storedLogin);
+      // Tomar la primera letra del login (sea email o username)
+      setUserInitial(storedLogin[0].toUpperCase());
+    }
+  }, []);
 
   const toggleSidebar = () => {
     const newState = !isSidebarOpen;
@@ -33,11 +46,17 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
 
   return (
     <div className="layout-container">
-      <div className={`sidebar-wrapper ${isSidebarOpen ? 'open' : ''}`}>
+      <div className={`sidebar-wrapper ${isSidebarOpen ? "open" : ""}`}>
         <nav className="sidebar">
           <div className="sidebar-header">
             <div className="user-profile">
-              <div className="avatar">sz</div>
+              <div className="avatar">
+                {userInitial} {/* Muestra la inicial */}
+              </div>
+              <div className="user-info">
+                <span className="username">{userLogin}</span>{" "}
+                {/* Muestra el login completo */}
+              </div>
               <div className="icons">
                 <BellIcon className="notification-icon" />
                 <button className="menu-button" onClick={toggleSidebar}>
@@ -47,6 +66,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
             </div>
           </div>
 
+          {/* Resto del Sidebar */}
           <button className="add-task-button-sidebar">
             <PlusIcon className="icon" />
             Añadir tarea
@@ -54,7 +74,11 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
 
           <div className="search-container">
             <SearchIcon className="search-icon" />
-            <input type="text" placeholder="Buscador" className="search-input" />
+            <input
+              type="text"
+              placeholder="Buscador"
+              className="search-input"
+            />
           </div>
 
           <ul className="nav-items">
@@ -79,10 +103,15 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
           </ul>
 
           <div className="projects-section">
-            <div className="projects-header" onClick={() => setIsProjectsOpen(!isProjectsOpen)}>
+            <div
+              className="projects-header"
+              onClick={() => setIsProjectsOpen(!isProjectsOpen)}
+            >
               <span>Mis Proyectos</span>
               <button className="toggle-button">
-                <ArrowIcon className={`arrow-icon ${isProjectsOpen ? 'open' : ''}`} />
+                <ArrowIcon
+                  className={`arrow-icon ${isProjectsOpen ? "open" : ""}`}
+                />
               </button>
             </div>
             {isProjectsOpen && (

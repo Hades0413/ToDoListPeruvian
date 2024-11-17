@@ -39,18 +39,20 @@ const Register: React.FC = () => {
     return `${nombre.toLowerCase()}.${apellido.toLowerCase()}${randomNum}`;
   };
 
-  
   // Enviar datos al backend para registrar usuario
   const handleSubmit = async (values: any) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/user/register", {
-        nombre: values.nombre,
-        apellido: values.apellido,
-        dni: values.dni,
-        username: values.username || generatedUsername,
-        email: values.email,
-        password: values.password,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/user/register",
+        {
+          nombre: values.nombre,
+          apellido: values.apellido,
+          dni: values.dni,
+          username: values.username || generatedUsername,
+          email: values.email,
+          password: values.password,
+        }
+      );
 
       if (response.status === 200) {
         Swal.fire({
@@ -65,9 +67,23 @@ const Register: React.FC = () => {
       }
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
+        // Aquí obtenemos el mensaje de error específico
+        let errorMessage =
+          "Hubo un error al registrar el usuario. Intenta de nuevo.";
+
+        // Si el error tiene un mensaje específico, lo mostramos
+        if (err.response.data === "Username ya existe") {
+          errorMessage = "El nombre de usuario ya está en uso.";
+        } else if (err.response.data === "DNI ya existe") {
+          errorMessage = "El DNI ya está registrado.";
+        } else if (err.response.data === "Email ya existe") {
+          errorMessage = "El correo electrónico ya está registrado.";
+        }
+
+        // Mostrar alerta con el mensaje específico
         Swal.fire({
           title: "Advertencia",
-          text: err.response.data.error,
+          text: errorMessage,
           icon: "warning",
           background: "#333",
           color: "#fff",
@@ -83,7 +99,6 @@ const Register: React.FC = () => {
       }
     }
   };
-
 
   const handleGenerateNewUsername = (formik: any) => {
     const newUsername = generateUsername(
