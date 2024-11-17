@@ -1,22 +1,25 @@
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios"; 
 import "../styles/AuthForm.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import authFormImg from "../assets/img/authFormImg.jpg";
 import FaLock from "../components/icons/FaLock";
-import FaEnvelope from "../components/icons/FaEnvelope";
+import FaUser from "../components/icons/FaUser";
 
 // Esquema de validación
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email("Email inválido")
-    .matches(
-      /@(gmail\.com|hotmail\.com|yahoo\.com|outlook\.com|icloud\.com)$/,
-      "Solo correos de Gmail, Hotmail, Yahoo, Outlook o iCloud"
-    )
-    .required("El email es obligatorio"),
+  login: Yup.string()
+    .required("El nombre de usuario o correo electrónico es obligatorio")
+    .test("is-email-or-username", "Correo electrónico no válido", (value) => {
+      if (value.includes("@")) {
+        return /@(gmail\.com|hotmail\.com|yahoo\.com|outlook\.com|icloud\.com)$/.test(
+          value
+        );
+      }
+      return true;
+    }),
   password: Yup.string()
     .min(8, "La contraseña debe tener al menos 8 caracteres")
     .required("La contraseña es obligatoria"),
@@ -25,24 +28,29 @@ const validationSchema = Yup.object({
 export default function Login() {
   const navigate = useNavigate();
 
-  // Inicializar Formik
   const formik = useFormik({
     initialValues: {
-      email: localStorage.getItem("rememberedEmail") || "",
+      login: "",
       password: "",
       rememberMe: !!localStorage.getItem("rememberedEmail"),
     },
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post("http://localhost:5000/login", {
-          email: values.email,
+        const loginRequest = {
+          email: values.login.includes("@") ? values.login : null,
+          username: !values.login.includes("@") ? values.login : null,
           password: values.password,
-        });
+        };
 
-        if (response.data.success) {
+        const response = await axios.post(
+          "http://localhost:8080/api/user/login",
+          loginRequest
+        );
+
+        if (response.data.code === 200) {
           if (values.rememberMe) {
-            localStorage.setItem("rememberedEmail", values.email);
+            localStorage.setItem("rememberedEmail", values.login);
           } else {
             localStorage.removeItem("rememberedEmail");
           }
@@ -59,21 +67,43 @@ export default function Login() {
         } else {
           Swal.fire({
             title: "Error",
-            text: response.data.message,
+            text: response.data.message || "Hubo un error al iniciar sesión.",
             icon: "error",
             background: "#333",
             color: "#fff",
           });
         }
-      } catch (error) {
-        console.error("Error al intentar iniciar sesión", error);
-        Swal.fire({
-          title: "Error",
-          text: "Hubo un error al intentar iniciar sesión.",
-          icon: "error",
-          background: "#333",
-          color: "#fff",
-        });
+      } catch (error: unknown) {
+        console.error("Error al intentar iniciar sesión");
+
+        // Aquí estamos verificando si el error es de tipo AxiosError
+        if (error instanceof AxiosError) {
+          if (error.response && error.response.status === 401) {
+            Swal.fire({
+              title: "Error",
+              text: "Credenciales incorrectas o el usuario no está autorizado.",
+              icon: "error",
+              background: "#333",
+              color: "#fff",
+            });
+          } else {
+            Swal.fire({
+              title: "Error",
+              text: "Hubo un error al intentar iniciar sesión.",
+              icon: "error",
+              background: "#333",
+              color: "#fff",
+            });
+          }
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Ocurrió un error desconocido.",
+            icon: "error",
+            background: "#333",
+            color: "#fff",
+          });
+        }
       }
     },
   });
@@ -90,21 +120,21 @@ export default function Login() {
           <form onSubmit={formik.handleSubmit}>
             <div
               className={`input-group ${
-                formik.touched.email && formik.errors.email ? "error" : ""
+                formik.touched.login && formik.errors.login ? "error" : ""
               }`}
             >
-              <FaEnvelope className="input-icon" />
+              <FaUser className="input-icon" />
               <input
-                id="email"
-                type="email"
+                id="login"
+                type="text"
                 className="auth-input"
-                placeholder="tu@email.com"
-                value={formik.values.email}
+                placeholder="Correo o nombre de usuario"
+                value={formik.values.login}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.email && formik.errors.email ? (
-                <div className="error-message">{formik.errors.email}</div>
+              {formik.touched.login && formik.errors.login ? (
+                <div className="error-message">{formik.errors.login}</div>
               ) : null}
             </div>
 
