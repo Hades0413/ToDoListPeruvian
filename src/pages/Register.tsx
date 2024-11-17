@@ -2,15 +2,25 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/AuthForm.css";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import authFormImg from "../assets/img/authFormImg.jpg";
+import InputGroup from "../components/common/InputGroup";
 import FaUser from "../components/icons/FaUser";
 import FaEnvelope from "../components/icons/FaEnvelope";
 import FaLock from "../components/icons/FaLock";
+import { User } from "../types/User";
 
 // Esquema de validación con Yup
+const allowedDomains = [
+  "gmail.com",
+  "hotmail.com",
+  "yahoo.com",
+  "outlook.com",
+  "icloud.com",
+];
+
 const validationSchema = Yup.object({
   nombre: Yup.string().required("El nombre es obligatorio"),
   apellido: Yup.string().required("El apellido es obligatorio"),
@@ -21,8 +31,8 @@ const validationSchema = Yup.object({
   email: Yup.string()
     .email("Correo electrónico inválido")
     .matches(
-      /@(gmail\.com|hotmail\.com|yahoo\.com|outlook\.com|icloud\.com)$/,
-      "Solo Gmail, Hotmail, Yahoo, Outlook o iCloud"
+      new RegExp(`@(${allowedDomains.join("|")})$`),
+      `Solo ${allowedDomains.join(", ")} son permitidos`
     )
     .required("El correo electrónico es obligatorio"),
   password: Yup.string()
@@ -36,11 +46,26 @@ const Register: React.FC = () => {
 
   const generateUsername = (nombre: string, apellido: string): string => {
     const randomNum = Math.floor(Math.random() * 10000);
-    return `${nombre.toLowerCase()}.${apellido.toLowerCase()}${randomNum}`;
+
+    // Definir todas las combinaciones posibles
+    const combinations = [
+      `${nombre.toLowerCase()}.${apellido.toLowerCase()}${randomNum}`,
+      `${apellido.toLowerCase()}.${nombre.toLowerCase()}${randomNum}`,
+      `${randomNum}${nombre.toLowerCase()}.${apellido.toLowerCase()}`,
+      `${randomNum}${apellido.toLowerCase()}.${nombre.toLowerCase()}`,
+      `${nombre.toLowerCase()}${apellido.toLowerCase()}${randomNum}`,
+      `${apellido.toLowerCase()}${nombre.toLowerCase()}${randomNum}`,
+      `${randomNum}${nombre.toLowerCase()}${apellido.toLowerCase()}`,
+      `${randomNum}${apellido.toLowerCase()}${nombre.toLowerCase()}`,
+    ];
+
+    // Seleccionar una combinación aleatoria
+    const randomIndex = Math.floor(Math.random() * combinations.length);
+
+    return combinations[randomIndex];
   };
 
-  // Enviar datos al backend para registrar usuario
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: User) => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/user/register",
@@ -66,47 +91,28 @@ const Register: React.FC = () => {
         });
       }
     } catch (err: any) {
-      if (err.response && err.response.status === 400) {
-        // Aquí obtenemos el mensaje de error específico
-        let errorMessage =
-          "Hubo un error al registrar el usuario. Intenta de nuevo.";
-
-        // Si el error tiene un mensaje específico, lo mostramos
-        if (err.response.data === "Username ya existe") {
-          errorMessage = "El nombre de usuario ya está en uso.";
-        } else if (err.response.data === "DNI ya existe") {
-          errorMessage = "El DNI ya está registrado.";
-        } else if (err.response.data === "Email ya existe") {
-          errorMessage = "El correo electrónico ya está registrado.";
-        }
-
-        // Mostrar alerta con el mensaje específico
-        Swal.fire({
-          title: "Advertencia",
-          text: errorMessage,
-          icon: "warning",
-          background: "#333",
-          color: "#fff",
-        });
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: "Hubo un error al registrar el usuario. Intenta de nuevo.",
-          icon: "error",
-          background: "#333",
-          color: "#fff",
-        });
-      }
+      handleErrorResponse(err); // Llamar a la función para manejar los errores
     }
   };
 
-  const handleGenerateNewUsername = (formik: any) => {
-    const newUsername = generateUsername(
-      formik.values.nombre,
-      formik.values.apellido
-    );
-    setGeneratedUsername(newUsername);
-    formik.setFieldValue("username", newUsername);
+  const handleErrorResponse = (err: any) => {
+    const errorMessages: Record<string, string> = {
+      "Username ya existe": "El nombre de usuario ya está en uso.",
+      "DNI ya existe": "El DNI ya está registrado.",
+      "Email ya existe": "El correo electrónico ya está registrado.",
+    };
+
+    const errorMessage =
+      errorMessages[err.response?.data] ||
+      "Hubo un error al registrar el usuario. Intenta de nuevo.";
+
+    Swal.fire({
+      title: "Advertencia",
+      text: errorMessage,
+      icon: "warning",
+      background: "#333",
+      color: "#fff",
+    });
   };
 
   return (
@@ -132,153 +138,85 @@ const Register: React.FC = () => {
           >
             {(formik) => (
               <Form>
-                {/* Campo Nombre */}
-                <div
-                  className={`input-group ${
-                    formik.touched.nombre && formik.errors.nombre ? "error" : ""
-                  }`}
-                >
-                  <FaUser className="input-icon" />
-                  <Field
-                    type="text"
-                    className="auth-input"
-                    name="nombre"
-                    placeholder="Nombre"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      formik.handleChange(e);
-                      setGeneratedUsername(
-                        generateUsername(e.target.value, formik.values.apellido)
-                      );
-                    }}
-                  />
-                  <ErrorMessage
-                    name="nombre"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
-
-                {/* Campo Apellido */}
-                <div
-                  className={`input-group ${
-                    formik.touched.apellido && formik.errors.apellido
-                      ? "error"
-                      : ""
-                  }`}
-                >
-                  <FaUser className="input-icon" />
-                  <Field
-                    type="text"
-                    className="auth-input"
-                    name="apellido"
-                    placeholder="Apellido"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      formik.handleChange(e);
-                      setGeneratedUsername(
-                        generateUsername(formik.values.nombre, e.target.value)
-                      );
-                    }}
-                  />
-                  <ErrorMessage
-                    name="apellido"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
-
-                {/* Campo DNI */}
-                <div
-                  className={`input-group ${
-                    formik.touched.dni && formik.errors.dni ? "error" : ""
-                  }`}
-                >
-                  <FaUser className="input-icon" />
-                  <Field
-                    type="text"
-                    className="auth-input"
-                    name="dni"
-                    placeholder="DNI"
-                  />
-                  <ErrorMessage
-                    name="dni"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
-
-                {/* Campo Username */}
-                <div
-                  className={`input-group ${
-                    formik.touched.username && formik.errors.username
-                      ? "error"
-                      : ""
-                  }`}
-                >
-                  <FaUser className="input-icon" />
-                  <Field
-                    type="text"
-                    className="auth-input"
-                    name="username"
-                    placeholder="Nombre de usuario"
-                    value={formik.values.username || generatedUsername}
-                  />
-                  <ErrorMessage
-                    name="username"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
-
-                {/* Botón para refrescar nombre de usuario */}
+                {/* Usar InputGroup para cada campo */}
+                <InputGroup
+                  formik={formik}
+                  name="nombre"
+                  type="text"
+                  placeholder="Nombre"
+                  icon={<FaUser />}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    formik.handleChange(e);
+                    const newUsername = generateUsername(
+                      e.target.value,
+                      formik.values.apellido
+                    );
+                    setGeneratedUsername(newUsername);
+                    formik.setFieldValue("username", newUsername);
+                  }}
+                />
+                <InputGroup
+                  formik={formik}
+                  name="apellido"
+                  type="text"
+                  placeholder="Apellido"
+                  icon={<FaUser />}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    formik.handleChange(e);
+                    const newUsername = generateUsername(
+                      formik.values.nombre,
+                      e.target.value
+                    );
+                    setGeneratedUsername(newUsername);
+                    formik.setFieldValue("username", newUsername);
+                  }}
+                />
+                <InputGroup
+                  formik={formik}
+                  name="dni"
+                  type="text"
+                  placeholder="DNI"
+                  icon={<FaUser />}
+                />
+                <InputGroup
+                  formik={formik}
+                  name="username"
+                  type="text"
+                  placeholder="Nombre de usuario"
+                  icon={<FaUser />}
+                  value={formik.values.username || generatedUsername}
+                  onChange={formik.handleChange}
+                />
+                {/* Botón para generar un nuevo nombre de usuario */}
                 <button
                   type="button"
-                  className="refresh-button"
-                  onClick={() => handleGenerateNewUsername(formik)}
+                  className="auth-button generate-username"
+                  onClick={() => {
+                    const newUsername = generateUsername(
+                      formik.values.nombre,
+                      formik.values.apellido
+                    );
+                    setGeneratedUsername(newUsername);
+                    formik.setFieldValue("username", newUsername);
+                  }}
                 >
-                  Generar nuevo nombre de usuario
+                  Generar nombre de usuario
                 </button>
 
-                {/* Campo Correo Electrónico */}
-                <div
-                  className={`input-group ${
-                    formik.touched.email && formik.errors.email ? "error" : ""
-                  }`}
-                >
-                  <FaEnvelope className="input-icon" />
-                  <Field
-                    type="email"
-                    className="auth-input"
-                    name="email"
-                    placeholder="Correo Electrónico"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
-
-                {/* Campo Contraseña */}
-                <div
-                  className={`input-group ${
-                    formik.touched.password && formik.errors.password
-                      ? "error"
-                      : ""
-                  }`}
-                >
-                  <FaLock className="input-icon" />
-                  <Field
-                    type="password"
-                    className="auth-input"
-                    name="password"
-                    placeholder="Contraseña"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
+                <InputGroup
+                  formik={formik}
+                  name="email"
+                  type="email"
+                  placeholder="Correo Electrónico"
+                  icon={<FaEnvelope />}
+                />
+                <InputGroup
+                  formik={formik}
+                  name="password"
+                  type="password"
+                  placeholder="Contraseña"
+                  icon={<FaLock />}
+                />
 
                 <button type="submit" className="auth-button">
                   Registrarse

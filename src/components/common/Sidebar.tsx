@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Sidebar.css";
 
-// Importa los iconos como componentes
 import PlusIcon from "../../components/icons/PlusIcon";
 import SearchIcon from "../../components/icons/SearchIcon";
 import InboxIcon from "../../components/icons/InboxIcon";

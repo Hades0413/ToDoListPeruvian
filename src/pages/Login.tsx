@@ -21,13 +21,23 @@ const validationSchema = Yup.object({
             value
           );
         }
-        return true;
+        return true; // No valida si no es un email
       }
     ),
   password: Yup.string()
     .min(8, "La contraseña debe tener al menos 8 caracteres")
     .required("La contraseña es obligatoria"),
 });
+
+const showAlert = (title: string, text: string, icon: "success" | "error") => {
+  Swal.fire({
+    title,
+    text,
+    icon,
+    background: "#333",
+    color: "#fff",
+  });
+};
 
 export default function Login() {
   const navigate = useNavigate();
@@ -41,6 +51,7 @@ export default function Login() {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        // Definir la solicitud de login en un solo campo (ya sea email o username)
         const loginRequest = {
           email: values.login.includes("@") ? values.login : null,
           username: !values.login.includes("@") ? values.login : null,
@@ -62,93 +73,36 @@ export default function Login() {
             localStorage.removeItem("rememberedEmail");
           }
 
-          Swal.fire({
-            title: "¡Éxito!",
-            text: "Has iniciado sesión correctamente.",
-            icon: "success",
-            background: "#333",
-            color: "#fff",
-          }).then(() => {
-            navigate("/home");
-          });
+          showAlert("¡Éxito!", "Has iniciado sesión correctamente.", "success");
+          navigate("/home");
         } else {
-          // Si el código no es 200, manejar el error con un mensaje más específico
-          let errorMessage = "Hubo un error al intentar iniciar sesión.";
-
-          if (response.data.message) {
-            errorMessage = response.data.message;
-          }
-
-          Swal.fire({
-            title: "Error",
-            text: errorMessage,
-            icon: "error",
-            background: "#333",
-            color: "#fff",
-          });
+          // Mensaje de error más específico
+          showAlert(
+            "Error",
+            response.data.message ||
+              "Hubo un error al intentar iniciar sesión.",
+            "error"
+          );
         }
       } catch (error: unknown) {
         console.error("Error al intentar iniciar sesión");
 
-        // Verificamos si el error es de tipo AxiosError
-        if (error instanceof AxiosError) {
-          if (error.response && error.response.status === 400) {
-            // Si es un error de tipo 400 (por ejemplo, credenciales incorrectas o campos vacíos)
-            let errorMessage = "Hubo un problema con los datos enviados.";
+        // Manejamos los errores de Axios de manera centralizada
+        if (error instanceof AxiosError && error.response) {
+          let errorMessage = "Hubo un error al intentar iniciar sesión.";
 
-            // Aquí evaluamos los mensajes específicos del backend
-            if (
-              error.response.data ===
-              "El correo electrónico o username es obligatorio"
-            ) {
-              errorMessage = "El correo electrónico o username es obligatorio.";
-            } else if (error.response.data === "La contraseña es obligatoria") {
-              errorMessage = "La contraseña es obligatoria.";
-            } else if (
-              error.response.data ===
-              "La contraseña debe tener al menos 8 caracteres"
-            ) {
-              errorMessage = "La contraseña debe tener al menos 8 caracteres.";
-            } else if (error.response.data === "Credenciales incorrectas") {
-              errorMessage =
-                "Las credenciales son incorrectas. Por favor, verifica tu correo o contraseña.";
-            }
-
-            Swal.fire({
-              title: "Error",
-              text: errorMessage,
-              icon: "error",
-              background: "#333",
-              color: "#fff",
-            });
-          } else if (error.response && error.response.status === 401) {
-            // Si la respuesta es 401 (credenciales incorrectas), mostrar un mensaje específico
-            Swal.fire({
-              title: "Error",
-              text: "Credenciales incorrectas o el usuario no está autorizado.",
-              icon: "error",
-              background: "#333",
-              color: "#fff",
-            });
-          } else {
-            // En caso de otro tipo de error
-            Swal.fire({
-              title: "Error",
-              text: "Hubo un error al intentar iniciar sesión.",
-              icon: "error",
-              background: "#333",
-              color: "#fff",
-            });
+          if (error.response.status === 400) {
+            // Error en datos enviados
+            errorMessage = error.response.data || errorMessage;
+          } else if (error.response.status === 401) {
+            // Error de credenciales incorrectas
+            errorMessage = "Credenciales incorrectas o usuario no autorizado.";
           }
+
+          showAlert("Error", errorMessage, "error");
         } else {
           // Error desconocido
-          Swal.fire({
-            title: "Error",
-            text: "Ocurrió un error desconocido.",
-            icon: "error",
-            background: "#333",
-            color: "#fff",
-          });
+          showAlert("Error", "Ocurrió un error desconocido.", "error");
         }
       }
     },
