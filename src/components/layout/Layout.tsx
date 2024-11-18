@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../common/Sidebar";
 import { Outlet } from "react-router-dom";
-import '../../styles/Layout.css';
+import '../../styles/layout/Layout.css';
 
 const Layout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

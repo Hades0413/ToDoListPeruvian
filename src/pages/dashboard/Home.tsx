@@ -1,10 +1,6 @@
 import React from "react";
-import "../styles/Home.css";
-import CalendarIcon from "../components/icons/CalendarIcon";
-import ViewIcon from "../components/icons/ViewIcon";
-import PlusIcon from "../components/icons/PlusIcon";
-import CircleIcon from "../components/icons/CircleIcon";
-
+import "../../styles/dashboard/Home.css";
+import * as DashboardIcons from "../../components/icons/dashboard";
 const Home: React.FC = () => {
   return (
     <div className="home-container">
@@ -15,11 +11,11 @@ const Home: React.FC = () => {
         </div>
         <div className="header-right">
           <button className="header-button">
-            <CalendarIcon className="icon" />
+            <DashboardIcons.CalendarIcon className="icon" />
             <span>Eventos de calendario</span>
           </button>
           <button className="header-button">
-            <ViewIcon className="icon" />
+            <DashboardIcons.ViewIcon className="icon" />
             <span>Vista</span>
           </button>
         </div>
@@ -28,7 +24,7 @@ const Home: React.FC = () => {
       <main className="home-content">
         <div className="task-item">
           <div className="task-checkbox">
-            <CircleIcon className="icon" />
+            <DashboardIcons.CircleIcon className="icon" />
           </div>
           <div className="task-text">
             Descargar aplicaciones y complementos adicionales para
@@ -36,7 +32,7 @@ const Home: React.FC = () => {
         </div>
 
         <button className="add-task-button">
-          <PlusIcon className="icon" />
+          <DashboardIcons.PlusIcon className="icon" />
           <span>Añadir tarea</span>
         </button>
       </main>

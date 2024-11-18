@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import authFormImg from "../assets/img/authFormImg.jpg";
-import InputGroup from "../components/common/InputGroup";
-import FaUser from "../components/icons/FaUser";
-import FaLock from "../components/icons/FaLock";
-import "../styles/AuthForm.css";
-import { loginUser } from "../services/authService";
+import authFormImg from "../../assets/img/auth/authFormImg.jpg";
+import InputGroup from "../../components/common/InputGroup";
+import { FaUser, FaLock } from "../../components/icons/auth";
+import "../../styles/auth/AuthForm.css";
+import { loginUser } from "../../services/auth/authService";
 
 const validationSchema = Yup.object({
   login: Yup.string()

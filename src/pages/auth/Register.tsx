@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { User } from "../types/User";
-import authFormImg from "../assets/img/authFormImg.jpg";
-import { registerUser } from "../services/authService";
-import InputGroup from "../components/common/InputGroup";
-import FaUser from "../components/icons/FaUser";
-import FaEnvelope from "../components/icons/FaEnvelope";
-import FaLock from "../components/icons/FaLock";
-import FaRandom from "../components/icons/FaRandom";
-import "../styles/AuthForm.css";
+import { User } from "../../types/User";
+import authFormImg from "../../assets/img/auth/authFormImg.jpg";
+import { registerUser } from "../../services/auth/authService";
+import InputGroup from "../../components/common/InputGroup";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaRandom,
+} from "../../components/icons/auth";
+import "../../styles/auth/AuthForm.css";
 
 const allowedDomains = [
   "gmail.com",

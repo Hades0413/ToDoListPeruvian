@@ -1,19 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Sidebar.css";
-
-import PlusIcon from "../../components/icons/PlusIcon";
-import SearchIcon from "../../components/icons/SearchIcon";
-import InboxIcon from "../../components/icons/InboxIcon";
-import TodayIcon from "../../components/icons/TodayIcon";
-import NextIcon from "../../components/icons/NextIcon";
-import FiltersIcon from "../../components/icons/FiltersIcon";
-import ArrowIcon from "../../components/icons/ArrowIcon";
-import HashIcon from "../../components/icons/HashIcon";
-import StarIcon from "../../components/icons/StarIcon";
-import TemplateIcon from "../../components/icons/TemplateIcon";
-import BellIcon from "../../components/icons/BellIcon";
-import MenuIcon from "../../components/icons/MenuIcon";
+import "../../styles/common/Sidebar.css";
+import * as SidebarIcons from "../icons/sidebar";
 
 interface SidebarProps {
   onSidebarToggle: (isOpen: boolean) => void;
@@ -57,9 +45,9 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
                 {/* Muestra el login completo */}
               </div>
               <div className="icons">
-                <BellIcon className="notification-icon" />
+                <SidebarIcons.BellIcon className="notification-icon" />
                 <button className="menu-button" onClick={toggleSidebar}>
-                  <MenuIcon className="menu-icon" />
+                  <SidebarIcons.MenuIcon className="menu-icon" />
                 </button>
               </div>
             </div>
@@ -67,12 +55,12 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
 
           {/* Resto del Sidebar */}
           <button className="add-task-button-sidebar">
-            <PlusIcon className="icon" />
+            <SidebarIcons.PlusIcon className="icon" />
             Añadir tarea
           </button>
 
           <div className="search-container">
-            <SearchIcon className="search-icon" />
+            <SidebarIcons.SearchIcon className="search-icon" />
             <input
               type="text"
               placeholder="Buscador"
@@ -82,21 +70,21 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
 
           <ul className="nav-items">
             <li className="nav-item">
-              <InboxIcon className="icon" />
+              <SidebarIcons.InboxIcon className="icon" />
               Bandeja de entrada
               <span className="count">2</span>
             </li>
             <li className="nav-item">
-              <TodayIcon className="icon" />
+              <SidebarIcons.TodayIcon className="icon" />
               Hoy
               <span className="count">1</span>
             </li>
             <li className="nav-item">
-              <NextIcon className="icon" />
+              <SidebarIcons.NextIcon className="icon" />
               Próximo
             </li>
             <li className="nav-item">
-              <FiltersIcon className="icon" />
+              <SidebarIcons.FiltersIcon className="icon" />
               Filtros y Etiquetas
             </li>
           </ul>
@@ -108,7 +96,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
             >
               <span>Mis Proyectos</span>
               <button className="toggle-button">
-                <ArrowIcon
+                <SidebarIcons.ArrowIcon
                   className={`arrow-icon ${isProjectsOpen ? "open" : ""}`}
                 />
               </button>
@@ -116,9 +104,9 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
             {isProjectsOpen && (
               <ul className="projects-list">
                 <li className="project-item">
-                  <HashIcon className="icon" />
+                  <SidebarIcons.HashIcon className="icon" />
                   Mis Cosas
-                  <StarIcon className="star-icon" />
+                  <SidebarIcons.StarIcon className="star-icon" />
                   <span className="count">5</span>
                 </li>
               </ul>
@@ -127,11 +115,11 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
 
           <div className="sidebar-footer">
             <button className="footer-button">
-              <PlusIcon className="icon" />
+              <SidebarIcons.PlusIcon className="icon" />
               Añadir un equipo
             </button>
             <button className="footer-button">
-              <TemplateIcon className="icon" />
+              <SidebarIcons.TemplateIcon className="icon" />
               Explorar plantillas
             </button>
           </div>
@@ -139,7 +127,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
       </div>
       {!isSidebarOpen && (
         <button className="floating-menu-button" onClick={toggleSidebar}>
-          <MenuIcon className="menu-icon" />
+          <SidebarIcons.MenuIcon className="menu-icon" />
         </button>
       )}
     </div>

@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Home, ArrowRight } from "lucide-react";
-import "../styles/Error404.css";
-import errorImage from "../assets/img/error404.png";
+import "../../styles/errors/Error404.css";
+import errorImage from "../../assets/img/errors/error404.png";
 
 const Error404: React.FC = () => {
   return (

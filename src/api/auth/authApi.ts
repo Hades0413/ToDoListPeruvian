@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../types/User";
+import { User } from "../../types/User";
 
 // URL base para tu API
 const apiUrl = "https://truthful-growth-production.up.railway.app/api/user";

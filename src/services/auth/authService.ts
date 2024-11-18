@@ -1,8 +1,8 @@
-import { login, register } from "../api/authApi";
+import { login, register } from "../../api/auth/authApi";
 import { showAlert } from "./authHelpers";
 import { NavigateFunction } from "react-router-dom";
 import { AxiosError } from "axios";
-import { User } from "../types/User";
+import { User } from "../../types/User";
 
 // Lógica para login de usuario
 export const loginUser = async (
