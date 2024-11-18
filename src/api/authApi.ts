@@ -1,9 +1,10 @@
 import axios from "axios";
+import { User } from "../types/User";
 
-// Define el URL base para tu API
+// URL base para tu API
 const apiUrl = "https://truthful-growth-production.up.railway.app/api/user";
 
-// Función para realizar la petición de login
+// Función para Login
 export const login = async (loginRequest: {
   email: string | null;
   username: string | null;
@@ -18,14 +19,8 @@ export const login = async (loginRequest: {
 };
 
 // Función para registrar un nuevo usuario
-export const register = async (userData: {
-  nombre: string;
-  apellido: string;
-  dni: string;
-  username: string;
-  email: string;
-  password: string;
-}) => {
+export const register = async (userData: User) => {
+  // interfaz User
   try {
     const response = await axios.post(`${apiUrl}/register`, userData);
     return response;

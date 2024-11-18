@@ -1,7 +1,8 @@
 import { login, register } from "../api/authApi";
-import { showAlert, handleErrorResponse } from "./authHelpers";
+import { showAlert } from "./authHelpers";
 import { NavigateFunction } from "react-router-dom";
 import { AxiosError } from "axios";
+import { User } from "../types/User";
 
 // Lógica para login de usuario
 export const loginUser = async (
@@ -68,31 +69,24 @@ export const loginUser = async (
 };
 
 // Lógica para registrar usuario
-export const registerUser = async (values: any, navigate: NavigateFunction) => {
+export const registerUser = async (
+  values: User,
+  navigate: NavigateFunction
+) => {
   try {
-    const response = await register({
-      nombre: values.nombre,
-      apellido: values.apellido,
-      dni: values.dni,
-      username: values.username,
-      email: values.email,
-      password: values.password,
-    });
+    const response = await register(values);
 
     if (response.status === 200) {
       showAlert("¡Éxito!", "Usuario registrado con éxito.", "success");
       navigate("/"); // Redirigir al login
     } else {
-      // Si el código de estado no es 200, mostrar un mensaje de error genérico
       showAlert("Error", "Hubo un problema al registrar el usuario.", "error");
     }
   } catch (err: any) {
-    // Si hay un error en la respuesta (por ejemplo, errores 400 o 500), manejarlo aquí
+    // Manejo de errores
     if (err.response) {
-      // Verificamos si el error tiene un mensaje de respuesta
       if (err.response.data) {
         const errorMessage = err.response.data;
-        // Aquí manejamos los errores específicos
         if (errorMessage === "Username ya existe") {
           showAlert(
             "Advertencia",
@@ -108,15 +102,12 @@ export const registerUser = async (values: any, navigate: NavigateFunction) => {
             "warning"
           );
         } else {
-          // Si el error no es específico, mostramos el mensaje genérico
           showAlert("Error", errorMessage, "error");
         }
       } else {
-        // Si no hay mensaje de error, mostramos un error genérico
         showAlert("Error", "Hubo un problema con la solicitud.", "error");
       }
     } else {
-      // Si no hay respuesta del servidor o si el error es de otro tipo
       showAlert(
         "Error",
         "Hubo un error desconocido. Intenta nuevamente.",

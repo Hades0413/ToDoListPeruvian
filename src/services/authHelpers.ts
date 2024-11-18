@@ -27,7 +27,7 @@ export const handleErrorResponse = (err: any) => {
     errorMessages[err.response?.data] ||
     "Hubo un error al registrar el usuario. Intenta de nuevo.";
 
-  // Usamos Swal directamente para mostrar la alerta
+  // Swal para mostrar la alerta
   Swal.fire({
     title: "Advertencia",
     text: errorMessage,
