@@ -1,19 +1,24 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { User } from "../types/User";
 import authFormImg from "../assets/img/authFormImg.jpg";
+import { registerUser } from "../services/authService";
 import InputGroup from "../components/common/InputGroup";
 import FaUser from "../components/icons/FaUser";
 import FaEnvelope from "../components/icons/FaEnvelope";
 import FaLock from "../components/icons/FaLock";
 import FaRandom from "../components/icons/FaRandom";
-import { User } from "../types/User";
 import "../styles/AuthForm.css";
 
-const allowedDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com", "icloud.com"];
+const allowedDomains = [
+  "gmail.com",
+  "hotmail.com",
+  "yahoo.com",
+  "outlook.com",
+  "icloud.com",
+];
 
 const validationSchema = Yup.object({
   nombre: Yup.string().required("El nombre es obligatorio"),
@@ -54,57 +59,13 @@ const Register: React.FC = () => {
     return combinations[randomIndex];
   };
 
-  const handleSubmit = async (values: User) => {
-    try {
-      const response = await axios.post("http://localhost:8080/api/user/register", {
-        nombre: values.nombre,
-        apellido: values.apellido,
-        dni: values.dni,
-        username: values.username || generatedUsername,
-        email: values.email,
-        password: values.password,
-      });
-
-      if (response.status === 200) {
-        Swal.fire({
-          title: "¡Éxito!",
-          text: "Usuario registrado con éxito.",
-          icon: "success",
-          background: "#333",
-          color: "#fff",
-        }).then(() => {
-          navigate("/");
-        });
-      }
-    } catch (err: any) {
-      handleErrorResponse(err);
-    }
-  };
-
-  const handleErrorResponse = (err: any) => {
-    const errorMessages: Record<string, string> = {
-      "Username ya existe": "El nombre de usuario ya está en uso.",
-      "DNI ya existe": "El DNI ya está registrado.",
-      "Email ya existe": "El correo electrónico ya está registrado.",
-    };
-
-    const errorMessage =
-      errorMessages[err.response?.data] ||
-      "Hubo un error al registrar el usuario. Intenta de nuevo.";
-
-    Swal.fire({
-      title: "Advertencia",
-      text: errorMessage,
-      icon: "warning",
-      background: "#333",
-      color: "#fff",
-    });
-  };
-
   return (
     <div className="auth-container">
       <div className="auth-content">
-        <div className="auth-image" style={{ backgroundImage: `url(${authFormImg})` }}></div>
+        <div
+          className="auth-image"
+          style={{ backgroundImage: `url(${authFormImg})` }}
+        ></div>
         <div className="auth-form">
           <h2 className="auth-title">Crea una cuenta</h2>
           <Formik
@@ -117,7 +78,7 @@ const Register: React.FC = () => {
               password: "",
             }}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={(values: User) => registerUser(values, navigate)}
           >
             {(formik) => (
               <Form>
@@ -129,7 +90,10 @@ const Register: React.FC = () => {
                   icon={<FaUser />}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     formik.handleChange(e);
-                    const newUsername = generateUsername(e.target.value, formik.values.apellido);
+                    const newUsername = generateUsername(
+                      e.target.value,
+                      formik.values.apellido
+                    );
                     setGeneratedUsername(newUsername);
                     formik.setFieldValue("username", newUsername);
                   }}
@@ -142,7 +106,10 @@ const Register: React.FC = () => {
                   icon={<FaUser />}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     formik.handleChange(e);
-                    const newUsername = generateUsername(formik.values.nombre, e.target.value);
+                    const newUsername = generateUsername(
+                      formik.values.nombre,
+                      e.target.value
+                    );
                     setGeneratedUsername(newUsername);
                     formik.setFieldValue("username", newUsername);
                   }}
@@ -164,7 +131,10 @@ const Register: React.FC = () => {
                   onChange={formik.handleChange}
                   rightIcon={<FaRandom />}
                   onRightIconClick={() => {
-                    const newUsername = generateUsername(formik.values.nombre, formik.values.apellido);
+                    const newUsername = generateUsername(
+                      formik.values.nombre,
+                      formik.values.apellido
+                    );
                     setGeneratedUsername(newUsername);
                     formik.setFieldValue("username", newUsername);
                   }}
