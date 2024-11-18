@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/AuthForm.css";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
@@ -10,16 +9,11 @@ import InputGroup from "../components/common/InputGroup";
 import FaUser from "../components/icons/FaUser";
 import FaEnvelope from "../components/icons/FaEnvelope";
 import FaLock from "../components/icons/FaLock";
+import FaRandom from "../components/icons/FaRandom";
 import { User } from "../types/User";
+import "../styles/AuthForm.css";
 
-// Esquema de validación con Yup
-const allowedDomains = [
-  "gmail.com",
-  "hotmail.com",
-  "yahoo.com",
-  "outlook.com",
-  "icloud.com",
-];
+const allowedDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com", "icloud.com"];
 
 const validationSchema = Yup.object({
   nombre: Yup.string().required("El nombre es obligatorio"),
@@ -46,8 +40,6 @@ const Register: React.FC = () => {
 
   const generateUsername = (nombre: string, apellido: string): string => {
     const randomNum = Math.floor(Math.random() * 10000);
-
-    // Definir todas las combinaciones posibles
     const combinations = [
       `${nombre.toLowerCase()}.${apellido.toLowerCase()}${randomNum}`,
       `${apellido.toLowerCase()}.${nombre.toLowerCase()}${randomNum}`,
@@ -58,26 +50,20 @@ const Register: React.FC = () => {
       `${randomNum}${nombre.toLowerCase()}${apellido.toLowerCase()}`,
       `${randomNum}${apellido.toLowerCase()}${nombre.toLowerCase()}`,
     ];
-
-    // Seleccionar una combinación aleatoria
     const randomIndex = Math.floor(Math.random() * combinations.length);
-
     return combinations[randomIndex];
   };
 
   const handleSubmit = async (values: User) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/user/register",
-        {
-          nombre: values.nombre,
-          apellido: values.apellido,
-          dni: values.dni,
-          username: values.username || generatedUsername,
-          email: values.email,
-          password: values.password,
-        }
-      );
+      const response = await axios.post("http://localhost:8080/api/user/register", {
+        nombre: values.nombre,
+        apellido: values.apellido,
+        dni: values.dni,
+        username: values.username || generatedUsername,
+        email: values.email,
+        password: values.password,
+      });
 
       if (response.status === 200) {
         Swal.fire({
@@ -87,11 +73,11 @@ const Register: React.FC = () => {
           background: "#333",
           color: "#fff",
         }).then(() => {
-          navigate("/"); // Redirigir al login
+          navigate("/");
         });
       }
     } catch (err: any) {
-      handleErrorResponse(err); // Llamar a la función para manejar los errores
+      handleErrorResponse(err);
     }
   };
 
@@ -118,10 +104,7 @@ const Register: React.FC = () => {
   return (
     <div className="auth-container">
       <div className="auth-content">
-        <div
-          className="auth-image"
-          style={{ backgroundImage: `url(${authFormImg})` }}
-        ></div>
+        <div className="auth-image" style={{ backgroundImage: `url(${authFormImg})` }}></div>
         <div className="auth-form">
           <h2 className="auth-title">Crea una cuenta</h2>
           <Formik
@@ -138,7 +121,6 @@ const Register: React.FC = () => {
           >
             {(formik) => (
               <Form>
-                {/* Usar InputGroup para cada campo */}
                 <InputGroup
                   formik={formik}
                   name="nombre"
@@ -147,10 +129,7 @@ const Register: React.FC = () => {
                   icon={<FaUser />}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     formik.handleChange(e);
-                    const newUsername = generateUsername(
-                      e.target.value,
-                      formik.values.apellido
-                    );
+                    const newUsername = generateUsername(e.target.value, formik.values.apellido);
                     setGeneratedUsername(newUsername);
                     formik.setFieldValue("username", newUsername);
                   }}
@@ -163,10 +142,7 @@ const Register: React.FC = () => {
                   icon={<FaUser />}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     formik.handleChange(e);
-                    const newUsername = generateUsername(
-                      formik.values.nombre,
-                      e.target.value
-                    );
+                    const newUsername = generateUsername(formik.values.nombre, e.target.value);
                     setGeneratedUsername(newUsername);
                     formik.setFieldValue("username", newUsername);
                   }}
@@ -186,23 +162,13 @@ const Register: React.FC = () => {
                   icon={<FaUser />}
                   value={formik.values.username || generatedUsername}
                   onChange={formik.handleChange}
-                />
-                {/* Botón para generar un nuevo nombre de usuario */}
-                <button
-                  type="button"
-                  className="auth-button generate-username"
-                  onClick={() => {
-                    const newUsername = generateUsername(
-                      formik.values.nombre,
-                      formik.values.apellido
-                    );
+                  rightIcon={<FaRandom />}
+                  onRightIconClick={() => {
+                    const newUsername = generateUsername(formik.values.nombre, formik.values.apellido);
                     setGeneratedUsername(newUsername);
                     formik.setFieldValue("username", newUsername);
                   }}
-                >
-                  Generar nombre de usuario
-                </button>
-
+                />
                 <InputGroup
                   formik={formik}
                   name="email"
@@ -217,14 +183,12 @@ const Register: React.FC = () => {
                   placeholder="Contraseña"
                   icon={<FaLock />}
                 />
-
                 <button type="submit" className="auth-button">
                   Registrarse
                 </button>
               </Form>
             )}
           </Formik>
-
           <a href="/" className="auth-link">
             ¿Ya tienes una cuenta? Inicia sesión
           </a>
