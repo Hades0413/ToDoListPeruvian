@@ -31,6 +31,12 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
     onSidebarToggle(newState);
   };
 
+  // Función para manejar el cierre de sesión
+  const handleLogout = () => {
+    localStorage.removeItem("userLogin");
+    navigate("/");
+  };
+
   return (
     <div className="layout-container">
       <div className={`sidebar-wrapper ${isSidebarOpen ? "open" : ""}`}>
@@ -121,6 +127,11 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
             <button className="footer-button">
               <SidebarIcons.TemplateIcon className="icon" />
               Explorar plantillas
+            </button>
+
+            <button className="footer-button" onClick={handleLogout}>
+              <SidebarIcons.TemplateIcon className="icon" />
+              Cerrar sesión
             </button>
           </div>
         </nav>
