@@ -16,12 +16,15 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Obtener el valor del login guardado en localStorage
-    const storedLogin = localStorage.getItem("userLogin");
-    if (storedLogin) {
-      setUserLogin(storedLogin);
-      // Tomar la primera letra del login (sea email o username)
-      setUserInitial(storedLogin[0].toUpperCase());
+    // Obtener los datos del usuario guardados en localStorage
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      const username = userData.username || ""; // Obtener el username del usuario
+      setUserLogin(username);
+
+      // Tomar la primera letra del username para la inicial
+      setUserInitial(username[0].toUpperCase());
     }
   }, []);
 
@@ -34,7 +37,8 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
   // Función para manejar el cierre de sesión
   const handleLogout = () => {
     localStorage.removeItem("userLogin");
-    navigate("/");
+    localStorage.removeItem("currentUser");
+    navigate("/", { replace: true });
   };
 
   return (
@@ -48,7 +52,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
               </div>
               <div className="user-info">
                 <span className="username">{userLogin}</span>{" "}
-                {/* Muestra el login completo */}
+                {/* Muestra el username del usuario */}
               </div>
               <div className="icons">
                 <SidebarIcons.BellIcon className="notification-icon" />
