@@ -1,4 +1,5 @@
 import axios from "axios";
+import { User } from "../../types/User";
 
 // URL base para tu API
 const apiUrl = "https://truthful-growth-production.up.railway.app/api/user";
@@ -38,16 +39,12 @@ export const login = async (loginRequest: {
 
 
 // Función para registrar un nuevo usuario
-export const register = async (userData: any) => {
+export const register = async (userData: User) => {
+  // interfaz User
   try {
     const response = await axios.post(`${apiUrl}/register`, userData);
     return response;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("Error al intentar registrar al usuario:", error.response?.data || error.message);
-    } else {
-      console.error("Error desconocido:", error);
-    }
+  } catch (error) {
     throw error;
   }
 };

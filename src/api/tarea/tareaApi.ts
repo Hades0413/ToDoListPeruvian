@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { Tarea } from "../../types/Tarea";
 
-const apiUrl = "http://localhost:8080/api/tareas";
+const apiUrl = "https://truthful-growth-production.up.railway.app/api/tareas";
 
 export const registrarTarea = async (tareaData: Tarea) => {
   try {
-    
     const response = await axios.post(`${apiUrl}/registrar`, tareaData, {
       headers: {
         'Content-Type': 'application/json',
@@ -14,6 +13,7 @@ export const registrarTarea = async (tareaData: Tarea) => {
 
     return response;
   } catch (error) {
+    console.error("Error al registrar tarea:", error);
     throw error;
   }
 };

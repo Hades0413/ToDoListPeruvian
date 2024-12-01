@@ -4,6 +4,7 @@ import { NavigateFunction } from "react-router-dom";
 import { AxiosError } from "axios";
 import { User } from "../../types/User";
 
+
 // Lógica para login de usuario
 export const loginUser = async (
   values: { login: string; password: string; rememberMe: boolean },
@@ -18,34 +19,38 @@ export const loginUser = async (
 
     const response = await login(loginRequest);
 
-    if (response.data.code === 200) {
-      localStorage.setItem("userLogin", values.login);
-      if (values.rememberMe) {
-        localStorage.setItem("rememberedEmail", values.login);
-      } else {
-        localStorage.removeItem("rememberedEmail");
-      }
+    if (response && response.data) {
+      if (response.data.code === 200) {
+        localStorage.setItem("userLogin", values.login);
+        if (values.rememberMe) {
+          localStorage.setItem("rememberedEmail", values.login);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
 
-      showAlert("¡Éxito!", "Has iniciado sesión correctamente.", "success");
-      navigate("/home");
-    } else if (response.data.code === 400) {
-      showAlert(
-        "Error",
-        response.data.message || "Los datos enviados no son válidos.",
-        "error"
-      );
-    } else if (response.data.code === 401) {
-      showAlert(
-        "Error",
-        "Credenciales incorrectas. Intenta nuevamente.",
-        "error"
-      );
+        showAlert("¡Éxito!", "Has iniciado sesión correctamente.", "success");
+        navigate("/home");
+      } else if (response.data.code === 400) {
+        showAlert(
+          "Error",
+          response.data.message || "Los datos enviados no son válidos.",
+          "error"
+        );
+      } else if (response.data.code === 401) {
+        showAlert(
+          "Error",
+          "Credenciales incorrectas. Intenta nuevamente.",
+          "error"
+        );
+      } else {
+        showAlert(
+          "Error",
+          response.data.message || "Hubo un error al intentar iniciar sesión.",
+          "error"
+        );
+      }
     } else {
-      showAlert(
-        "Error",
-        response.data.message || "Hubo un error al intentar iniciar sesión.",
-        "error"
-      );
+      showAlert("Error", "Respuesta de servidor no válida.", "error");
     }
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
@@ -67,6 +72,7 @@ export const loginUser = async (
     }
   }
 };
+
 
 // Lógica para registrar usuario
 export const registerUser = async (

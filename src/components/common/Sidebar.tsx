@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/common/Sidebar.css";
 import * as SidebarIcons from "../icons/sidebar";
+import TareaForm from "../common/TareaForm";
 
 interface SidebarProps {
   onSidebarToggle: (isOpen: boolean) => void;
@@ -13,6 +14,8 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
   const [userLogin, setUserLogin] = useState<string>("");
   const [userInitial, setUserInitial] = useState<string>("");
 
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
     const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
       const userData = JSON.parse(storedUser);
-      const username = userData.username || ""; // Obtener el username del usuario
+      const username = userData.username || "";
       setUserLogin(username);
 
       // Tomar la primera letra del username para la inicial
@@ -32,6 +35,14 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
     const newState = !isSidebarOpen;
     setIsSidebarOpen(newState);
     onSidebarToggle(newState);
+  };
+
+  const handleAddTaskClick = () => {
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
   };
 
   // Función para manejar el cierre de sesión
@@ -48,11 +59,10 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
           <div className="sidebar-header">
             <div className="user-profile">
               <div className="avatar">
-                {userInitial} {/* Muestra la inicial */}
+                {userInitial}
               </div>
               <div className="user-info">
                 <span className="username">{userLogin}</span>{" "}
-                {/* Muestra el username del usuario */}
               </div>
               <div className="icons">
                 <SidebarIcons.BellIcon className="notification-icon" />
@@ -64,7 +74,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
           </div>
 
           {/* Resto del Sidebar */}
-          <button className="add-task-button-sidebar">
+          <button className="add-task-button-sidebar" onClick={handleAddTaskClick}>
             <SidebarIcons.PlusIcon className="icon" />
             Añadir tarea
           </button>
@@ -145,6 +155,8 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
           <SidebarIcons.MenuIcon className="menu-icon" />
         </button>
       )}
+      
+      {isFormOpen && <TareaForm onClose={handleCloseForm} />}
     </div>
   );
 }
