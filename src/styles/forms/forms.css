@@ -1,0 +1,337 @@
+/* Estilos generales para el modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.initial-project-popup {
+  position: fixed;
+  z-index: 1000;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 220px;
+  cursor: pointer;
+  animation: popupFadeIn 0.2s ease-out;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.popup-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+}
+
+.popup-content:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.popup-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.popup-subtitle {
+  font-size: 0.8rem;
+  color: #808080;
+  margin-top: 2px;
+}
+
+/* Modal y contenido */
+.modal-content {
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  color: #ffffff;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #2f2f2f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: #1f1f1f;
+  z-index: 1;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #808080;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Estilos del formulario */
+.project-form {
+  padding: 20px;
+}
+
+.project-form-group {
+  margin-bottom: 20px;
+}
+
+.project-form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.project-form-row .project-form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.project-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #808080;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.project-form-input {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #2f2f2f;
+  border: 1px solid #3f3f3f;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+textarea.project-form-input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.project-form-input:focus {
+  outline: none;
+  border-color: #ff4b2b;
+  box-shadow: 0 0 0 2px rgba(255, 75, 43, 0.2);
+}
+
+.character-count {
+  display: block;
+  text-align: right;
+  color: #808080;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+/* Estilos de las acciones del formulario */
+.project-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #2f2f2f;
+}
+
+.project-cancel-button,
+.project-submit-button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.project-cancel-button {
+  background: none;
+  border: none;
+  color: #808080;
+}
+
+.project-cancel-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.project-submit-button {
+  background-color: #ff4b2b;
+  border: none;
+  color: #ffffff;
+}
+
+.project-submit-button:hover {
+  background-color: #ff3b1b;
+}
+
+/* Media Queries para dispositivos móviles */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 16px;
+    max-height: 85vh;
+  }
+
+  .project-form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  textarea.project-form-input {
+    min-height: 80px;
+  }
+
+  .initial-project-popup {
+    width: auto;
+  
+  }
+
+  /* Modificar el posicionamiento del botón */
+  .popup-content {
+    text-align: left;
+  }
+
+  .project-submit-button {
+    width: 100%; /* Botón de tamaño completo en móviles */
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .project-cancel-button {
+    width: 100%; /* Botón de tamaño completo en móviles */
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .project-form-actions {
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+    padding: 16px 0;
+  }
+
+  /* Ajustar el texto de los botones */
+  .popup-title,
+  .popup-subtitle {
+    font-size: 1rem;
+    text-align: left;
+  }
+}
+
+/* Ajustes para pantallas menores a 480px */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .project-form-actions {
+    position: sticky;
+    bottom: 0;
+    background-color: #1f1f1f;
+    padding: 16px;
+    margin: 0 -16px -16px;
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .project-cancel-button,
+  .project-submit-button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .project-form-group label {
+    font-size: 1rem;
+  }
+
+  /* Posicionamiento del botón sobre la izquierda */
+  .initial-project-popup {
+    left: 140px !important; /* Superpone el popup a la izquierda */
+    width: auto;
+    z-index: 1100;
+  }
+
+
+  .project-submit-button {
+    width: 160px; /* Hacer el botón más ancho */
+    height: 40px; /* Hacer el botón más bajo */
+    font-size: 1rem;
+    padding: 0 12px;
+  }
+
+  .project-cancel-button {
+    width: 160px; /* Hacer el botón más ancho */
+    height: 40px; /* Hacer el botón más bajo */
+    font-size: 1rem;
+    padding: 0 12px;
+  }
+
+  .popup-title,
+  .popup-subtitle {
+    font-size: 1rem;
+    text-align: left;
+  }
+}

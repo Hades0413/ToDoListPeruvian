@@ -1,32 +1,29 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/common/Sidebar.css";
 import * as SidebarIcons from "../icons/sidebar";
 import TareaForm from "../common/TareaForm";
+import { ProjectsSection } from "./sections/ProjectsSection";
+import "../../styles/common/Sidebar.css";
+import "../../styles/forms/forms.css";
 
 interface SidebarProps {
   onSidebarToggle: (isOpen: boolean) => void;
 }
 
 export default function Sidebar({ onSidebarToggle }: SidebarProps) {
-  const [isProjectsOpen, setIsProjectsOpen] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [userLogin, setUserLogin] = useState<string>("");
   const [userInitial, setUserInitial] = useState<string>("");
-
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Obtener los datos del usuario guardados en localStorage
     const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
       const userData = JSON.parse(storedUser);
       const username = userData.username || "";
       setUserLogin(username);
-
-      // Tomar la primera letra del username para la inicial
       setUserInitial(username[0].toUpperCase());
     }
   }, []);
@@ -45,7 +42,6 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
     setIsFormOpen(false);
   };
 
-  // Función para manejar el cierre de sesión
   const handleLogout = () => {
     localStorage.removeItem("userLogin");
     localStorage.removeItem("currentUser");
@@ -58,11 +54,9 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
         <nav className="sidebar">
           <div className="sidebar-header">
             <div className="user-profile">
-              <div className="avatar">
-                {userInitial}
-              </div>
+              <div className="avatar">{userInitial}</div>
               <div className="user-info">
-                <span className="username">{userLogin}</span>{" "}
+                <span className="username">{userLogin}</span>
               </div>
               <div className="icons">
                 <SidebarIcons.BellIcon className="notification-icon" />
@@ -73,8 +67,10 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
             </div>
           </div>
 
-          {/* Resto del Sidebar */}
-          <button className="add-task-button-sidebar" onClick={handleAddTaskClick}>
+          <button
+            className="add-task-button-sidebar"
+            onClick={handleAddTaskClick}
+          >
             <SidebarIcons.PlusIcon className="icon" />
             Añadir tarea
           </button>
@@ -109,29 +105,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
             </li>
           </ul>
 
-          <div className="projects-section">
-            <div
-              className="projects-header"
-              onClick={() => setIsProjectsOpen(!isProjectsOpen)}
-            >
-              <span>Mis Proyectos</span>
-              <button className="toggle-button">
-                <SidebarIcons.ArrowIcon
-                  className={`arrow-icon ${isProjectsOpen ? "open" : ""}`}
-                />
-              </button>
-            </div>
-            {isProjectsOpen && (
-              <ul className="projects-list">
-                <li className="project-item">
-                  <SidebarIcons.HashIcon className="icon" />
-                  Mis Cosas
-                  <SidebarIcons.StarIcon className="star-icon" />
-                  <span className="count">5</span>
-                </li>
-              </ul>
-            )}
-          </div>
+          <ProjectsSection />
 
           <div className="sidebar-footer">
             <button className="footer-button">
@@ -142,7 +116,6 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
               <SidebarIcons.TemplateIcon className="icon" />
               Explorar plantillas
             </button>
-
             <button className="footer-button" onClick={handleLogout}>
               <SidebarIcons.TemplateIcon className="icon" />
               Cerrar sesión
@@ -155,7 +128,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
           <SidebarIcons.MenuIcon className="menu-icon" />
         </button>
       )}
-      
+
       {isFormOpen && <TareaForm onClose={handleCloseForm} />}
     </div>
   );

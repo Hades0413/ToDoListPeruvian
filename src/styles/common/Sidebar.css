@@ -35,7 +35,7 @@
   border: none;
   color: white;
   cursor: pointer;
-  z-index: 1001; /* Increased z-index to stay on top */
+  z-index: 1001;
   padding: 8px;
   display: flex;
   align-items: center;
@@ -69,6 +69,15 @@
   font-size: 12px;
 }
 
+.user-info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.username {
+  font-weight: 600;
+}
+
 .icons {
   display: flex;
   gap: 10px;
@@ -92,12 +101,7 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.notification-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.menu-icon {
+.notification-icon, .menu-icon {
   width: 20px;
   height: 20px;
 }
@@ -114,6 +118,11 @@
   cursor: pointer;
   margin-bottom: 20px;
   width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.add-task-button-sidebar:hover {
+  background-color: #ff3b1b;
 }
 
 .search-container {
@@ -123,12 +132,12 @@
 
 .search-input {
   width: 100%;
-  padding: 8px 30px; /* Elimina el padding adicional a la izquierda y derecha */
+  padding: 8px 30px;
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid transparent;
   border-radius: 5px;
   color: white;
-  box-sizing: border-box; /* Añade esta línea para que el padding se gestione correctamente */
+  box-sizing: border-box;
 }
 
 .search-icon {
@@ -157,6 +166,7 @@
   padding: 8px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .nav-item:hover {
@@ -181,12 +191,27 @@
   cursor: pointer;
 }
 
-.toggle-button {
+.projects-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-button, .add-project-button {
   background: none;
   border: none;
   color: white;
   cursor: pointer;
-  padding: 0;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-button:hover, .add-project-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .arrow-icon {
@@ -211,6 +236,7 @@
   padding: 8px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .project-item:hover {
@@ -237,6 +263,7 @@
   border-radius: 5px;
   width: 100%;
   text-align: left;
+  transition: background-color 0.2s ease;
 }
 
 .footer-button:hover {
@@ -246,11 +273,13 @@
 .icon {
   width: 20px;
   height: 20px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
   .sidebar-wrapper {
-    width: 80%; /* Changed to 80% width on mobile */
+    width: 80%;
+    max-width: 305px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   }
 
@@ -259,4 +288,36 @@
     left: 16px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
+
+  .user-profile {
+    flex-wrap: wrap;
+  }
+
+  .user-info {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .icons {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
 }
+
+@media (max-width: 480px) {
+  .sidebar-wrapper {
+    width: 100%;
+    max-width: none;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-row .form-group {
+    width: 100%;
+  }
+}
+
