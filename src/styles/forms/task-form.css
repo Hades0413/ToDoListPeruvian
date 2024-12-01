@@ -1,0 +1,265 @@
+/* General styles for the task form */
+.task-form-container {
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  margin: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.task-form {
+  padding: 16px;
+  position: relative;
+}
+
+.task-form-main {
+  margin-bottom: 16px;
+}
+
+/* Input fields */
+.task-name-input,
+.task-description-input {
+  width: 100%;
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.task-name-input {
+  margin-bottom: 8px;
+}
+
+.task-description-input {
+  font-size: 0.9rem;
+  resize: none;
+  min-height: 60px;
+}
+
+.task-name-input::placeholder,
+.task-description-input::placeholder {
+  color: #808080;
+}
+
+.date-input {
+  width: 100%;
+  padding: 8px;
+  background-color: #2f2f2f;
+  border: 1px solid #3f3f3f;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #ff4b2b;
+}
+
+/* Form actions */
+.task-form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #2f2f2f;
+  padding-top: 16px;
+}
+
+.task-form-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.task-action-button {
+  background: none;
+  border: none;
+  color: #808080;
+  padding: 6px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-action-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.task-action-button .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Submit buttons */
+.task-form-submit {
+  display: flex;
+  gap: 8px;
+}
+
+.cancel-button,
+.submit-button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-button {
+  background: none;
+  border: none;
+  color: #808080;
+}
+
+.cancel-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.submit-button {
+  background-color: #ff4b2b;
+  border: none;
+  color: #ffffff;
+}
+
+.submit-button:hover {
+  background-color: #ff3b1b;
+}
+
+/* Priority select */
+.priority-select {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 200px;
+  margin-top: 8px;
+  z-index: 1000;
+}
+
+.priority-select-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #3f3f3f;
+}
+
+.priority-options {
+  padding: 8px;
+}
+
+.priority-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: none;
+  background: none;
+  color: var(--priority-color);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.priority-option:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.priority-option.selected {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.priority-option .check {
+  margin-left: auto;
+}
+
+/* Completed tasks */
+.completed-tasks {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background-color: #2a2a2a;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.completed-tasks .icon {
+  color: #4CAF50;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .task-form-actions {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .task-form-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .task-form-submit {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .completed-tasks {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-form-container {
+    margin: 8px;
+  }
+
+  .task-form {
+    padding: 12px;
+  }
+
+  .task-form-buttons {
+    flex-wrap: wrap;
+  }
+
+  .task-action-button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .task-form-submit {
+    flex-direction: column;
+  }
+
+  .cancel-button,
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .priority-select {
+    width: calc(100% - 24px);
+    left: 12px;
+  }
+
+  .completed-tasks {
+    width: calc(100% - 32px);
+    justify-content: center;
+  }
+}
