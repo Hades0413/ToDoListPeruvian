@@ -1,4 +1,3 @@
-import React from 'react';
 import * as Icons from '../../icons/sidebar';
 
 interface TaskFormButtonsProps {
