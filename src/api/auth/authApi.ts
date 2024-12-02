@@ -22,8 +22,6 @@ export const login = async (loginRequest: {
 
       localStorage.setItem("userId", JSON.stringify(userData.id));
 
-      console.log("ID del usuario encontrado:", userData.id);
-
       return response;
     }
 

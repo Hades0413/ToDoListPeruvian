@@ -1,24 +1,37 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import * as SidebarIcons from "../../icons/sidebar";
-import { InitialProjectPopup } from '../modals/InitialProjectPopup';
-import { NewProjectForm } from '../forms/NewProjectForm';
-import { truncateText } from '../../../utils/stringUtils'; // Importa la función truncateText
+import { InitialProjectPopup } from "../modals/InitialProjectPopup";
+import { NewProjectForm } from "../forms/NewProjectForm";
+import { truncateText } from "../../../utils/stringUtils";
+import ProyectoService from "../../../services/proyecto/proyectoService";
 
 interface Project {
-  id: string;
-  name: string;
-  count: number;
+  idProyecto: string;
+  nombreProyecto: string;
 }
 
 export function ProjectsSection() {
   const [isProjectsOpen, setIsProjectsOpen] = useState(true);
-  const [projects, setProjects] = useState<Project[]>([
-    { id: '1', name: 'Mis Cosas', count: 5 }
-  ]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [showInitialPopup, setShowInitialPopup] = useState(false);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const addButtonRef = useRef<HTMLButtonElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+
+  const proyectoService = new ProyectoService();
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const proyectos = await proyectoService.getProyectos();
+        setProjects(proyectos);
+      } catch (error) {
+        console.error("Error al obtener los proyectos:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const toggleProjects = () => setIsProjectsOpen(!isProjectsOpen);
 
@@ -29,9 +42,8 @@ export function ProjectsSection() {
 
   const handleProjectSubmit = (projectData: any) => {
     const newProject: Project = {
-      id: Date.now().toString(),
-      name: projectData.nombre,
-      count: 0
+      idProyecto: Date.now().toString(),
+      nombreProyecto: projectData.nombre,
     };
     setProjects([...projects, newProject]);
     setShowProjectForm(false);
@@ -39,7 +51,6 @@ export function ProjectsSection() {
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      // Si se hace clic fuera del botón o del popup, cierra el popup
       if (
         showInitialPopup &&
         !addButtonRef.current?.contains(e.target as Node) &&
@@ -49,8 +60,8 @@ export function ProjectsSection() {
       }
     };
 
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [showInitialPopup]);
 
   return (
@@ -88,10 +99,9 @@ export function ProjectsSection() {
       {isProjectsOpen && (
         <ul className="projects-list">
           {projects.map((project) => (
-            <li key={project.id} className="project-item">
+            <li key={project.idProyecto} className="project-item">
               <SidebarIcons.HashIcon className="icon" />
-              {truncateText(project.name, 20)} {/* Aplica truncateText */}
-              <span className="count">{project.count}</span>
+              {truncateText(project.nombreProyecto || "", 20)}{" "}
             </li>
           ))}
         </ul>

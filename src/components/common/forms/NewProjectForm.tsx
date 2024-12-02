@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import * as SidebarIcons from "../../icons/sidebar";
+import { Proyecto } from "../../../types/Proyecto";
+import { registrarProyecto } from "../../../api/proyecto/proyectoApi";
 
 interface NewProjectFormProps {
   onClose: () => void;
@@ -8,32 +10,62 @@ interface NewProjectFormProps {
 }
 
 export function NewProjectForm({ onClose, onSubmit }: NewProjectFormProps) {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    descripcion: '',
-    prioridad: '1',
-    fecha_vencimiento: '',
+  const [formData, setFormData] = useState<{
+    nombre: string;
+    descripcion: string;
+    prioridad: string;
+    fecha_vencimiento: string;
+  }>({
+    nombre: "",
+    descripcion: "",
+    prioridad: "1",
+    fecha_vencimiento: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    const idUsuario = localStorage.getItem("userId");
+    if (!idUsuario) {
+      console.error("Usuario no autenticado");
+      return;
+    }
+
+    const proyectoData: Proyecto = {
+      idUsuario: Number(idUsuario),
+      nombreProyecto: formData.nombre,
+      descripcionProyecto: formData.descripcion,
+      prioridad: Number(formData.prioridad),
+      fechaVencimiento: formData.fecha_vencimiento,
+    };
+
+    try {
+      await registrarProyecto(proyectoData);
+      onSubmit(proyectoData);
+      onClose();
+    } catch (error) {
+      console.error("Error al registrar proyecto:", error);
+    }
   };
 
-  const today = new Date().toISOString().split('T')[0];
-  const maxDate = '2050-12-31';
+  const today = new Date().toISOString().split("T")[0];
+  const maxDate = "2050-12-31";
 
   return createPortal(
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Añadir proyecto</h2>
           <button className="close-button" onClick={onClose}>
@@ -54,7 +86,9 @@ export function NewProjectForm({ onClose, onSubmit }: NewProjectFormProps) {
               required
               className="project-form-input"
             />
-            <span className="character-count">{formData.nombre.length}/120</span>
+            <span className="character-count">
+              {formData.nombre.length}/120
+            </span>
           </div>
 
           <div className="project-form-group">
@@ -101,7 +135,11 @@ export function NewProjectForm({ onClose, onSubmit }: NewProjectFormProps) {
           </div>
 
           <div className="project-form-actions">
-            <button type="button" className="project-cancel-button" onClick={onClose}>
+            <button
+              type="button"
+              className="project-cancel-button"
+              onClick={onClose}
+            >
               Cancelar
             </button>
             <button type="submit" className="project-submit-button">
@@ -114,4 +152,3 @@ export function NewProjectForm({ onClose, onSubmit }: NewProjectFormProps) {
     document.body
   );
 }
-
