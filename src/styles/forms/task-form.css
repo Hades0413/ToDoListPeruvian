@@ -85,12 +85,17 @@
 }
 
 .task-action-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
+
 
 .task-action-button .icon {
   width: 16px;
   height: 16px;
+}
+
+.task-action-button .icon:hover{
+  color: #fff;
 }
 
 /* Submit buttons */
