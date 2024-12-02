@@ -4,6 +4,7 @@ import { InitialProjectPopup } from "../modals/InitialProjectPopup";
 import { NewProjectForm } from "../forms/NewProjectForm";
 import { truncateText } from "../../../utils/stringUtils";
 import ProyectoService from "../../../services/proyecto/proyectoService";
+import '../../../styles/common/ProjectsSection.css';
 
 interface Project {
   idProyecto: string;
