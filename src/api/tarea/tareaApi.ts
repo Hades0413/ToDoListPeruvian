@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import { Tarea } from "../../types/Tarea";
 
 const apiUrl = "https://truthful-growth-production.up.railway.app/api/tareas";
@@ -7,8 +7,8 @@ export const registrarTarea = async (tareaData: Tarea) => {
   try {
     const response = await axios.post(`${apiUrl}/registrar`, tareaData, {
       headers: {
-        'Content-Type': 'application/json',
-      }
+        "Content-Type": "application/json",
+      },
     });
 
     return response;
@@ -18,21 +18,23 @@ export const registrarTarea = async (tareaData: Tarea) => {
   }
 };
 
-
-
 export const obtenerTareasPorProyecto = async (idProyecto: number) => {
   try {
-    const response = await axios.post(`${apiUrl}/proyecto`, { idProyecto }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    console.log("Tareas listadas:", response.data);
+    const response = await axios.post(
+      `${apiUrl}/proyecto`,
+      { idProyecto },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error(`Error al obtener las tareas del proyecto ${idProyecto}:`, error);
+    console.error(
+      `Error al obtener las tareas del proyecto ${idProyecto}:`,
+      error
+    );
     throw error;
   }
 };
-

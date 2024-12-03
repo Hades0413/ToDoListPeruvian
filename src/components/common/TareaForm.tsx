@@ -77,16 +77,14 @@ const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
   ) => {
     try {
       await tareaService.createTarea(values);
-      // Show SweetAlert success message
       Swal.fire({
         title: "Tarea registrada correctamente",
         icon: "success",
         confirmButtonText: "Aceptar",
-        background: "#333", // Fondo oscuro
-        color: "#fff", // Texto blanco
+        background: "#333",
+        color: "#fff",
       }).then(() => {
-        // Reload the page or update the task list
-        window.location.reload(); // Reload the page to show the new task
+        window.location.reload();
       });
       setStatus({ success: "Tarea creada correctamente" });
       onClose();

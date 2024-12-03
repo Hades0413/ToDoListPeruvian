@@ -36,8 +36,6 @@ export const listarProyecto = async () => {
       },
     });
 
-    console.log("Proyectos listados:", response.data);
-
     return response.data;
   } catch (error) {
     console.error("Error al listar proyectos:", error);
@@ -45,10 +43,10 @@ export const listarProyecto = async () => {
   }
 };
 
-
+// Función para listar proyectos por id
 export const obtenerProyectoPorId = async (id: number) => {
   try {
-    const response = await axios.get(`/api/proyectos/${id}`); // Ajusta esta URL según tu API
+    const response = await axios.get(`/api/proyectos/${id}`);
     return response;
   } catch (error) {
     console.error("Error al obtener el proyecto:", error);

@@ -1,11 +1,11 @@
 export const getPriorityClass = (prioridad: number) => {
   switch (prioridad) {
     case 1:
-      return "priority-high";
+      return "priority-low";
     case 2:
       return "priority-medium";
     case 3:
-      return "priority-low";
+      return "priority-high";
     default:
       return "";
   }

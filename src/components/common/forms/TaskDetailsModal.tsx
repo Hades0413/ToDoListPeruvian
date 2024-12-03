@@ -29,13 +29,6 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
           <CloseIcon />
         </button>
       </div>
-      {/* 
-      <div className="task-info">
-        <Status className="task-info-icon" />
-        <span className="task-info-label">ID</span>
-        <div className="task-info-value">{tarea.idTarea}</div>
-      </div> 
-      */}
 
       <div className="task-info">
         <Description className="task-info-icon task-icon" />
@@ -48,10 +41,10 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
         <span className="task-info-label">Prioridad</span>
         <div className={`task-info-value ${getPriorityClass(tarea.prioridad)}`}>
           {tarea.prioridad === 1
-            ? "Alta"
+            ? "Baja"
             : tarea.prioridad === 2
             ? "Media"
-            : "Baja"}
+            : "Alta"}
         </div>
       </div>
 
@@ -62,8 +55,8 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
           {tarea.estado === 1
             ? "Pendiente"
             : tarea.estado === 2
-            ? "En progreso"
-            : "Completada"}
+            ? "Inactivo"
+            : "Activo"}
         </div>
       </div>
       <div className="task-info">

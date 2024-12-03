@@ -135,13 +135,13 @@
 .task-info {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 26px;
   animation: fadeIn 0.3s ease-out;
 }
 .task-icon {
-  width: 20px; /* Ajusta según el tamaño deseado */
-  height: 20px; /* Ajusta según el tamaño deseado */
-  color: inherit; /* Para mantener el color actual */
+  width: 20px;
+  height: 20px;
+  color: inherit;
 }
 
 @keyframes fadeIn {
@@ -162,12 +162,14 @@
 
 .task-info-label {
   color: #808080;
+  width: 100px;
 }
 
 .task-info-value {
   color: #ffffff;
   font-size: 1rem;
   margin-left: 5px;
+  width: 250px;
 }
 
 .priority-high {
@@ -228,6 +230,6 @@
 
 @media (max-width: 768px) {
   .task-modal {
-    width: 100%;
+    width: 90%;
   }
 }

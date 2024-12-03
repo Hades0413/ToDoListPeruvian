@@ -24,13 +24,17 @@ const InputGroup: React.FC<InputGroupProps> = ({
   rightIcon,
   onRightIconClick,
 }) => (
-  <div className={`input-group ${formik.touched[name] && formik.errors[name] ? "error" : ""}`}>
+  <div
+    className={`input-group ${
+      formik.touched[name] && formik.errors[name] ? "error" : ""
+    }`}
+  >
     <div className="input-wrapper">
       <span className="input-icon">{icon}</span>
       <Field
         type={type}
-        className={`auth-input ${rightIcon ? 'with-right-icon' : ''} ${
-          (value || formik.values[name]) ? 'has-value' : ''
+        className={`auth-input ${rightIcon ? "with-right-icon" : ""} ${
+          value || formik.values[name] ? "has-value" : ""
         }`}
         name={name}
         placeholder=" "
@@ -45,8 +49,8 @@ const InputGroup: React.FC<InputGroupProps> = ({
         {placeholder}
       </label>
       {rightIcon && (
-        <button 
-          type="button" 
+        <button
+          type="button"
           className="input-icon-right"
           onClick={onRightIconClick}
         >

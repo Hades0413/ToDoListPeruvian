@@ -1,6 +1,5 @@
-
-import React from 'react';
-import * as Icons from '../../icons/sidebar';
+import React from "react";
+import * as Icons from "../../icons/sidebar";
 
 interface TaskStateSelectProps {
   currentState: number;
@@ -8,15 +7,15 @@ interface TaskStateSelectProps {
   onClose: () => void;
 }
 
-export function TaskStateSelect({ 
-  currentState, 
-  onSelect, 
-  onClose 
+export function TaskStateSelect({
+  currentState,
+  onSelect,
+  onClose,
 }: TaskStateSelectProps) {
   const states = [
-    { id: 1, name: 'Pendiente', color: '#808080' },
-    { id: 2, name: 'Inactivo', color: '#FFC107' },
-    { id: 3, name: 'Activo', color: '#4CAF50' }
+    { id: 1, name: "Pendiente", color: "#808080" },
+    { id: 2, name: "Inactivo", color: "#FFC107" },
+    { id: 3, name: "Activo", color: "#4CAF50" },
   ];
 
   return (
@@ -28,13 +27,15 @@ export function TaskStateSelect({
         </button>
       </div>
       <div className="priority-options">
-        {states.map(state => (
+        {states.map((state) => (
           <button
             key={state.id}
             type="button"
-            className={`priority-option ${currentState === state.id ? 'selected' : ''}`}
+            className={`priority-option ${
+              currentState === state.id ? "selected" : ""
+            }`}
             onClick={() => onSelect(state.id)}
-            style={{ '--priority-color': state.color } as React.CSSProperties}
+            style={{ "--priority-color": state.color } as React.CSSProperties}
           >
             <Icons.BellIcon className="icon" />
             <span>{state.name}</span>
@@ -47,4 +48,3 @@ export function TaskStateSelect({
     </div>
   );
 }
-

@@ -10,6 +10,7 @@ import "../../../styles/common/ProjectsSection.css";
 interface Project {
   idProyecto: string;
   nombreProyecto: string;
+  idPrioridad?: number;
 }
 
 export function ProjectsSection() {
@@ -36,6 +37,21 @@ export function ProjectsSection() {
     fetchProjects();
   }, []);
 
+  useEffect(() => {
+    if (!showProjectForm) {
+      const fetchProjects = async () => {
+        try {
+          const proyectos = await proyectoService.getProyectos();
+          setProjects(proyectos);
+        } catch (error) {
+          console.error("Error al obtener los proyectos:", error);
+        }
+      };
+
+      fetchProjects();
+    }
+  }, [showProjectForm]);
+
   const toggleProjects = () => setIsProjectsOpen(!isProjectsOpen);
 
   const handleAddProjectClick = (e: React.MouseEvent) => {
@@ -47,13 +63,15 @@ export function ProjectsSection() {
     const newProject: Project = {
       idProyecto: Date.now().toString(),
       nombreProyecto: projectData.nombre,
+      idPrioridad: projectData.idPrioridad,
     };
-    setProjects([...projects, newProject]);
+
+    setProjects((prevProjects) => [...prevProjects, newProject]);
     setShowProjectForm(false);
   };
 
-  const handleProjectClick = (idProyecto: string) => {
-    navigate(`/proyecto/${idProyecto}`);
+  const handleProjectClick = (idProyecto: string, nombreProyecto: string) => {
+    navigate(`/proyecto/${idProyecto}`, { state: { nombreProyecto } });
   };
 
   useEffect(() => {
@@ -70,6 +88,32 @@ export function ProjectsSection() {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [showInitialPopup]);
+
+  const getPriorityClass = (priority: number) => {
+    switch (priority) {
+      case 1:
+        return "priority-low";
+      case 2:
+        return "priority-medium";
+      case 3:
+        return "priority-high";
+      default:
+        return "";
+    }
+  };
+
+  const getPriorityEmoji = (priority: number) => {
+    switch (priority) {
+      case 1:
+        return "🟢";
+      case 2:
+        return "🟠";
+      case 3:
+        return "🔴";
+      default:
+        return "⚪";
+    }
+  };
 
   return (
     <div className="projects-section">
@@ -109,9 +153,18 @@ export function ProjectsSection() {
             <li
               key={project.idProyecto}
               className="project-item"
-              onClick={() => handleProjectClick(project.idProyecto)}
+              onClick={() =>
+                handleProjectClick(project.idProyecto, project.nombreProyecto)
+              }
             >
               <SidebarIcons.HashIcon className="icon" />
+              <span
+                className={`project-priority ${getPriorityClass(
+                  project.idPrioridad || 0
+                )}`}
+              >
+                {getPriorityEmoji(project.idPrioridad || 0)}{" "}
+              </span>
               {truncateText(project.nombreProyecto || "", 20)}{" "}
             </li>
           ))}

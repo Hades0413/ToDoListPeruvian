@@ -6,8 +6,9 @@
   transition: all 0.3s ease;
 }
 
-.proyecto-container h1{
-color: #fff;
+.proyecto-container h1 {
+  color: #fff;
+  margin-left: 15px;
 }
 
 .home-content {

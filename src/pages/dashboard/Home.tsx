@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import * as Icons from '../../components/icons/sidebar';
-import TareaForm from '../../components/common/TareaForm';
-import '../../styles/dashboard/Home.css';
-import '../../styles/forms/task-form.css';
-import '../../styles/forms/forms.css';
+import React, { useState } from "react";
+import * as Icons from "../../components/icons/sidebar";
+import TareaForm from "../../components/common/TareaForm";
+import "../../styles/dashboard/Home.css";
+import "../../styles/forms/task-form.css";
+import "../../styles/forms/forms.css";
 
-// Define types for task data
 interface TaskData {
   idProyecto: number;
   nombre: string;
@@ -15,7 +14,6 @@ interface TaskData {
   fechaVencimiento: string;
 }
 
-// Type for a complete task
 interface Task extends TaskData {
   id: number;
 }
@@ -24,11 +22,13 @@ export default function Home() {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
-  const [currentProjectId, setCurrentProjectId] = useState<number | undefined>();
+  const [currentProjectId, setCurrentProjectId] = useState<
+    number | undefined
+  >();
 
   const handleTaskSubmit = (taskData: TaskData) => {
     const newTask: Task = {
-      id: Date.now(), // Generate a unique ID
+      id: Date.now(),
       ...taskData,
       idProyecto: currentProjectId || taskData.idProyecto,
     };
@@ -80,9 +80,7 @@ export default function Home() {
               <div className="task-text">
                 <div>{task.nombre}</div>
                 {task.descripcion && (
-                  <div className="task-description">
-                    {task.descripcion}
-                  </div>
+                  <div className="task-description">{task.descripcion}</div>
                 )}
               </div>
             </div>
@@ -114,4 +112,3 @@ export default function Home() {
     </div>
   );
 }
-

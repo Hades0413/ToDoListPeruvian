@@ -149,6 +149,6 @@ export function NewProjectForm({ onClose, onSubmit }: NewProjectFormProps) {
         </form>
       </div>
     </div>,
-   document.body
+    document.body
   );
 }

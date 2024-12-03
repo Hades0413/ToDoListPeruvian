@@ -1,5 +1,4 @@
-
-import * as Icons from '../../icons/sidebar';
+import * as Icons from "../../icons/sidebar";
 
 interface TaskPrioritySelectProps {
   currentPriority: number;
@@ -7,15 +6,15 @@ interface TaskPrioritySelectProps {
   onClose: () => void;
 }
 
-export function TaskPrioritySelect({ 
-  currentPriority, 
-  onSelect, 
-  onClose 
+export function TaskPrioritySelect({
+  currentPriority,
+  onSelect,
+  onClose,
 }: TaskPrioritySelectProps) {
   const priorities = [
-    { id: 1, name: 'Baja', color: '#808080' },
-    { id: 2, name: 'Media', color: '#ffb13d' },
-    { id: 3, name: 'Alta', color: '#ff4b2b' }
+    { id: 1, name: "Baja", color: "#808080" },
+    { id: 2, name: "Media", color: "#ffb13d" },
+    { id: 3, name: "Alta", color: "#ff4b2b" },
   ];
 
   return (
@@ -27,13 +26,17 @@ export function TaskPrioritySelect({
         </button>
       </div>
       <div className="priority-options">
-        {priorities.map(priority => (
+        {priorities.map((priority) => (
           <button
             key={priority.id}
             type="button"
-            className={`priority-option ${currentPriority === priority.id ? 'selected' : ''}`}
+            className={`priority-option ${
+              currentPriority === priority.id ? "selected" : ""
+            }`}
             onClick={() => onSelect(priority.id)}
-            style={{ '--priority-color': priority.color } as React.CSSProperties}
+            style={
+              { "--priority-color": priority.color } as React.CSSProperties
+            }
           >
             <Icons.FiltersIcon className="icon" />
             <span>{priority.name}</span>
@@ -46,4 +49,3 @@ export function TaskPrioritySelect({
     </div>
   );
 }
-

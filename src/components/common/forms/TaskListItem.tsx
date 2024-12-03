@@ -1,8 +1,8 @@
-import React from 'react';
-import { Tarea } from '../../../types/Tarea';
+import React from "react";
+import { Tarea } from "../../../types/Tarea";
 import { TodayIcon, Edit, Delete } from "../../icons/sidebar";
-import { formatDate } from '../../../utils/dateUtils';
-import { Clock } from 'lucide-react';
+import { formatDate } from "../../../utils/dateUtils";
+import { Clock } from "lucide-react";
 
 interface TaskListItemProps {
   tarea: Tarea;
