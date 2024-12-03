@@ -1,6 +1,6 @@
 import {
   registrarProyecto,
-  listarProyecto,
+  listarProyecto
 } from "../../api/proyecto/proyectoApi";
 import { Proyecto } from "../../types/Proyecto";
 import { handleProyectoErrorResponse } from "./proyectoHelpers";

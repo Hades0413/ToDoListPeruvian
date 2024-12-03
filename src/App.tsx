@@ -5,6 +5,7 @@ import Home from "./pages/dashboard/Home";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/protected/ProtectedRoute";
 import Error404 from "./pages/errors/Error404";
+import Proyecto from "./pages/proyecto/Proyecto";
 
 function App() {
   return (
@@ -20,6 +21,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/proyecto/:idProyecto"
+            element={
+              <ProtectedRoute>
+                <Proyecto />
               </ProtectedRoute>
             }
           />

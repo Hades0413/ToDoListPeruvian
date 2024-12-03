@@ -17,3 +17,22 @@ export const registrarTarea = async (tareaData: Tarea) => {
     throw error;
   }
 };
+
+
+
+export const obtenerTareasPorProyecto = async (idProyecto: number) => {
+  try {
+    const response = await axios.post(`${apiUrl}/proyecto`, { idProyecto }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log("Tareas listadas:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener las tareas del proyecto ${idProyecto}:`, error);
+    throw error;
+  }
+};
+

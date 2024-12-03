@@ -57,10 +57,10 @@ export const ProjectSelect: React.FC<ProjectSelectProps> = ({
             </option>
             {proyectos.map((proyecto) => (
               <option
-                key={`project-${proyecto.idUsuario}-${proyecto.nombreProyecto}`}
-                value={proyecto.idUsuario}
+                key={`project-${proyecto.idProyecto}`}
+                value={proyecto.idProyecto}
               >
-                {proyecto.nombreProyecto}
+                {proyecto.nombreProyecto}{" "}
               </option>
             ))}
           </select>

@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as SidebarIcons from "../../icons/sidebar";
 import { InitialProjectPopup } from "../modals/InitialProjectPopup";
 import { NewProjectForm } from "../forms/NewProjectForm";
 import { truncateText } from "../../../utils/stringUtils";
 import ProyectoService from "../../../services/proyecto/proyectoService";
-import '../../../styles/common/ProjectsSection.css';
+import "../../../styles/common/ProjectsSection.css";
 
 interface Project {
   idProyecto: string;
@@ -18,6 +19,7 @@ export function ProjectsSection() {
   const [showProjectForm, setShowProjectForm] = useState(false);
   const addButtonRef = useRef<HTMLButtonElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const proyectoService = new ProyectoService();
 
@@ -48,6 +50,10 @@ export function ProjectsSection() {
     };
     setProjects([...projects, newProject]);
     setShowProjectForm(false);
+  };
+
+  const handleProjectClick = (idProyecto: string) => {
+    navigate(`/proyecto/${idProyecto}`);
   };
 
   useEffect(() => {
@@ -100,7 +106,11 @@ export function ProjectsSection() {
       {isProjectsOpen && (
         <ul className="projects-list">
           {projects.map((project) => (
-            <li key={project.idProyecto} className="project-item">
+            <li
+              key={project.idProyecto}
+              className="project-item"
+              onClick={() => handleProjectClick(project.idProyecto)}
+            >
               <SidebarIcons.HashIcon className="icon" />
               {truncateText(project.nombreProyecto || "", 20)}{" "}
             </li>

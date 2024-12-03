@@ -1,4 +1,4 @@
-import { registrarTarea } from "../../api/tarea/tareaApi";
+import { registrarTarea,obtenerTareasPorProyecto } from "../../api/tarea/tareaApi";
 import { Tarea } from "../../types/Tarea";
 import { handleTareaErrorResponse } from "./tareaHelpers";
 
@@ -14,6 +14,18 @@ class TareaService {
     }
   }
 
+  async getTareasPorProyecto(idProyecto: number) {
+    try {
+      const tareas = await obtenerTareasPorProyecto(idProyecto);
+      return tareas;
+    } catch (error) {
+      console.error(
+        `Error al obtener las tareas del proyecto ${idProyecto}:`,
+        error
+      );
+      throw error;
+    }
+  }
 }
 
 export default TareaService;
