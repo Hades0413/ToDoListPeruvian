@@ -45,3 +45,13 @@ export const listarProyecto = async () => {
   }
 };
 
+
+export const obtenerProyectoPorId = async (id: number) => {
+  try {
+    const response = await axios.get(`/api/proyectos/${id}`); // Ajusta esta URL según tu API
+    return response;
+  } catch (error) {
+    console.error("Error al obtener el proyecto:", error);
+    throw error;
+  }
+};

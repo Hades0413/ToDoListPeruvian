@@ -42,6 +42,9 @@
   transition: background-color 0.2s ease;
   border-radius: 8px;
 }
+.popup-content svg{
+  color: #808080;
+}
 
 .popup-content:hover {
   background-color: rgba(255, 255, 255, 0.1);

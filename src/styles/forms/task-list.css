@@ -12,7 +12,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .task-list-item:hover {
   background-color: #333333;
   transform: translateX(4px);
@@ -74,7 +73,7 @@
 }
 
 .update-button:hover {
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .delete-button:hover {
@@ -145,7 +144,6 @@
   color: inherit; /* Para mantener el color actual */
 }
 
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -172,13 +170,25 @@
   margin-left: 5px;
 }
 
-.priority-high { color: #ff4b2b; }
-.priority-medium { color: #ffd700; }
-.priority-low { color: #4CAF50; }
+.priority-high {
+  color: #ff4b2b;
+}
+.priority-medium {
+  color: #ffd700;
+}
+.priority-low {
+  color: #4caf50;
+}
 
-.status-pending { color: #ffd700; }
-.status-in-progress { color: #1e90ff; }
-.status-completed { color: #4CAF50; }
+.status-pending {
+  color: #ffd700;
+}
+.status-in-progress {
+  color: #1e90ff;
+}
+.status-completed {
+  color: #4caf50;
+}
 
 .task-modal-actions {
   display: flex;

@@ -30,7 +30,7 @@ const Proyecto: React.FC = () => {
 
   return (
     <div className="proyecto-container">
-      <h1>Proyecto {idProyecto}</h1>
+      <h1>Proyecto {idProyecto} </h1>
       <div className="tasks-container">
         {tareas.length > 0 ? (
           tareas.map((tarea) => (
