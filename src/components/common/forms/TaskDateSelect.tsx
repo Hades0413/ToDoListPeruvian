@@ -1,22 +1,21 @@
-import * as Icons from '../../icons/sidebar';
+import { X } from "lucide-react";
 
 interface TaskDateSelectProps {
   currentDate: string;
   onSelect: (date: string) => void;
   onClose: () => void;
 }
-
-export function TaskDateSelect({ 
-  currentDate, 
-  onSelect, 
-  onClose 
+export function TaskDateSelect({
+  currentDate,
+  onSelect,
+  onClose,
 }: TaskDateSelectProps) {
   return (
     <div className="priority-select date-select">
       <div className="priority-select-header">
         <span>Fecha de vencimiento</span>
         <button type="button" onClick={onClose}>
-          <Icons.CloseIcon className="icon" />
+          <X className="icon" />
         </button>
       </div>
       <div className="date-select-content">
@@ -24,11 +23,10 @@ export function TaskDateSelect({
           type="date"
           value={currentDate}
           onChange={(e) => onSelect(e.target.value)}
-          min={new Date().toISOString().split('T')[0]}
+          min={new Date().toISOString().split("T")[0]}
           className="date-input"
         />
       </div>
     </div>
   );
 }
-

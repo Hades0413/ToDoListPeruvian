@@ -11,6 +11,9 @@ import { TaskDateSelect } from "./forms/TaskDateSelect";
 import { TaskFormButtons } from "./forms/TaskFormButtons";
 import { TaskFormSubmit } from "./forms/TaskFormSubmit";
 import { ProjectSelect } from "./forms/ProjectSelect";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import Swal from "sweetalert2";
 
 interface TareaFormProps {
   onClose: () => void;
@@ -74,6 +77,17 @@ const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
   ) => {
     try {
       await tareaService.createTarea(values);
+      // Show SweetAlert success message
+      Swal.fire({
+        title: "Tarea registrada correctamente",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+        background: "#333", // Fondo oscuro
+        color: "#fff", // Texto blanco
+      }).then(() => {
+        // Reload the page or update the task list
+        window.location.reload(); // Reload the page to show the new task
+      });
       setStatus({ success: "Tarea creada correctamente" });
       onClose();
     } catch (error) {
@@ -100,108 +114,171 @@ const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
   };
 
   return (
-    <div className="task-form-container">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+    <AnimatePresence>
+      <motion.div
+        className="task-form-overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
       >
-        {({ values, setFieldValue, status }) => (
-          <Form className="task-form">
-            <div className="task-form-main">
-              <ProjectSelect
-                proyectos={proyectos}
-                value={values.idProyecto}
-                onChange={(value) => setFieldValue("idProyecto", value)}
-              />
+        <motion.div
+          className="task-form-container"
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 50, opacity: 0 }}
+          transition={{ type: "spring", damping: 20, stiffness: 300 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="close-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+            aria-label="Cerrar formulario"
+          >
+            <X size={24} />
+          </button>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ values, setFieldValue, status }) => (
+              <Form className="task-form">
+                <div className="task-form-main">
+                  <ProjectSelect
+                    proyectos={proyectos}
+                    value={values.idProyecto}
+                    onChange={(value) => setFieldValue("idProyecto", value)}
+                  />
 
-              <Field
-                name="nombre"
-                type="text"
-                placeholder="Nombre de la tarea"
-                className="task-name-input"
-                maxLength={120}
-              />
-              <ErrorMessage name="nombre" component="div" className="error" />
+                  <Field
+                    name="nombre"
+                    type="text"
+                    placeholder="Nombre de la tarea"
+                    className="task-name-input"
+                    maxLength={120}
+                  />
+                  <ErrorMessage
+                    name="nombre"
+                    component="div"
+                    className="error"
+                  />
 
-              <Field
-                name="descripcion"
-                as="textarea"
-                placeholder="Descripción"
-                className="task-description-input"
-              />
-              <ErrorMessage
-                name="descripcion"
-                component="div"
-                className="error"
-              />
-            </div>
+                  <Field
+                    name="descripcion"
+                    as="textarea"
+                    placeholder="Descripción"
+                    className="task-description-input"
+                  />
+                  <ErrorMessage
+                    name="descripcion"
+                    component="div"
+                    className="error"
+                  />
+                </div>
 
-            <div className="task-form-actions">
-              <TaskFormButtons
-                onPriorityClick={() => {
-                  closeAllSelects();
-                  setShowPrioritySelect(true);
-                }}
-                onStateClick={() => {
-                  closeAllSelects();
-                  setShowStateSelect(true);
-                }}
-                onDateClick={() => {
-                  closeAllSelects();
-                  setShowDateSelect(true);
-                }}
-                currentPriority={values.prioridad}
-                currentState={values.estado}
-                currentDate={values.fechaVencimiento}
-              />
+                <div className="task-form-actions">
+                  <TaskFormButtons
+                    onPriorityClick={() => {
+                      closeAllSelects();
+                      setShowPrioritySelect(true);
+                    }}
+                    onStateClick={() => {
+                      closeAllSelects();
+                      setShowStateSelect(true);
+                    }}
+                    onDateClick={() => {
+                      closeAllSelects();
+                      setShowDateSelect(true);
+                    }}
+                    currentPriority={values.prioridad}
+                    currentState={values.estado}
+                    currentDate={values.fechaVencimiento}
+                  />
 
-              <TaskFormSubmit onCancel={onClose} />
-            </div>
+                  <TaskFormSubmit onCancel={onClose} />
+                </div>
 
-            {showPrioritySelect && (
-              <TaskPrioritySelect
-                currentPriority={values.prioridad}
-                onSelect={(priority) => {
-                  setFieldValue("prioridad", priority);
-                  setShowPrioritySelect(false);
-                }}
-                onClose={() => setShowPrioritySelect(false)}
-              />
+                {showPrioritySelect && (
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="select-popup"
+                    >
+                      <TaskPrioritySelect
+                        currentPriority={values.prioridad}
+                        onSelect={(priority) => {
+                          setFieldValue("prioridad", priority);
+                          setShowPrioritySelect(false);
+                        }}
+                        onClose={() => setShowPrioritySelect(false)}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                )}
+
+                {showStateSelect && (
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="select-popup"
+                    >
+                      <TaskStateSelect
+                        currentState={values.estado}
+                        onSelect={(state) => {
+                          setFieldValue("estado", state);
+                          setShowStateSelect(false);
+                        }}
+                        onClose={() => setShowStateSelect(false)}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                )}
+
+                {showDateSelect && (
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="select-popup"
+                    >
+                      <TaskDateSelect
+                        currentDate={values.fechaVencimiento}
+                        onSelect={(date) => {
+                          setFieldValue("fechaVencimiento", date);
+                          setShowDateSelect(false);
+                        }}
+                        onClose={() => setShowDateSelect(false)}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                )}
+
+                {status && (
+                  <div>
+                    {status.success && (
+                      <p className="success">{status.success}</p>
+                    )}
+                    {status.error && <p className="error">{status.error}</p>}
+                  </div>
+                )}
+              </Form>
             )}
-
-            {showStateSelect && (
-              <TaskStateSelect
-                currentState={values.estado}
-                onSelect={(state) => {
-                  setFieldValue("estado", state);
-                  setShowStateSelect(false);
-                }}
-                onClose={() => setShowStateSelect(false)}
-              />
-            )}
-
-            {showDateSelect && (
-              <TaskDateSelect
-                currentDate={values.fechaVencimiento}
-                onSelect={(date) => {
-                  setFieldValue("fechaVencimiento", date);
-                  setShowDateSelect(false);
-                }}
-                onClose={() => setShowDateSelect(false)}
-              />
-            )}
-
-            {status && (
-              <div>
-                {status.success && <p className="success">{status.success}</p>}
-                {status.error && <p className="error">{status.error}</p>}
-              </div>
-            )}
-          </Form>
-        )}
-      </Formik>
-    </div>
+          </Formik>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

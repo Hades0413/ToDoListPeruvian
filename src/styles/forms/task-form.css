@@ -1,19 +1,59 @@
 /* General styles for the task form */
-.task-form-container {
-  background-color: #1f1f1f;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+.task-form-overlay {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 500px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
+
+.task-form-container {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease; /* Added transition */
+}
+.task-form .error{
+  color:#ff4b2b;
+  font-size: 14px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #3f3f3f;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: #555;
+}
+
+.close-button svg {
+  color: #fff;
+}
+
 .task-form {
-  padding: 16px;
+  padding: 24px;
   position: relative;
 }
 
@@ -77,10 +117,10 @@
 }
 
 .task-action-button {
-  background: none;
+  background-color: #3f3f3f; /* Updated background color */
   border: none;
-  color: #808080;
-  padding: 6px 8px;
+  color: #ffffff; /* Updated text color */
+  padding: 8px 12px; /* Updated padding */
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -91,7 +131,7 @@
 }
 
 .task-action-button:hover {
-  color: #fff;
+  background-color: #4a4a4a; /* Updated hover color */
 }
 
 .task-action-button .icon {
@@ -150,6 +190,7 @@
   width: 200px;
   margin-top: 8px;
   z-index: 1000;
+  color: #fff;
 }
 
 .priority-select-header {
@@ -272,5 +313,43 @@
     width: calc(100% - 32px);
     justify-content: center;
   }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; } /* Updated animation */
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.task-form-overlay {
+  animation: fadeIn 0.3s ease;
+  transition: opacity 0.3s ease; /* Added transition */
+}
+
+.task-form-container {
+  animation: slideUp 0.3s ease;
+}
+
+/* Select pop-ups */
+.select-popup {
+  position: absolute;
+  z-index: 1000;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 8px;
+}
+
+.select-popup-content {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 16px;
 }
 

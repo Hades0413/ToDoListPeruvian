@@ -6,6 +6,10 @@
   transition: all 0.3s ease;
 }
 
+.proyecto-container h1{
+color: #fff;
+}
+
 .home-content {
   max-width: 1200px;
   margin: 0 auto;

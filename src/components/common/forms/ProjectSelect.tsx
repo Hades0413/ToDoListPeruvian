@@ -1,6 +1,7 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { Proyecto } from "../../../types/Proyecto";
+import "../../../styles/forms/project-select.css";
 
 interface ProjectSelectProps {
   proyectos: Proyecto[];
@@ -23,47 +24,37 @@ export const ProjectSelect: React.FC<ProjectSelectProps> = ({
     onChange(numericValue);
   };
 
-  if (loading) {
-    return (
-      <div className="form-group">
-        <label htmlFor="idProyecto">Proyecto</label>
-        <select disabled>
-          <option>Cargando proyectos...</option>
-        </select>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="form-group">
-        <label htmlFor="idProyecto">Proyecto</label>
-        <select disabled>
-          <option>Error al cargar proyectos</option>
-        </select>
-        <div className="error">{error}</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="form-group">
+    <div className="project-select">
       <label htmlFor="idProyecto">Proyecto</label>
       <Field name="idProyecto">
         {() => (
-          <select id="idProyecto" onChange={handleChange} value={value || ""}>
-            <option key="default" value="">
-              Selecciona un proyecto
-            </option>
-            {proyectos.map((proyecto) => (
-              <option
-                key={`project-${proyecto.idProyecto}`}
-                value={proyecto.idProyecto}
-              >
-                {proyecto.nombreProyecto}{" "}
+          <div className="select-wrapper">
+            <select
+              id="idProyecto"
+              onChange={handleChange}
+              value={value || ""}
+              disabled={loading || !!error}
+            >
+              <option key="default" value="">
+                {loading
+                  ? "Cargando proyectos..."
+                  : error
+                  ? "Error al cargar proyectos"
+                  : "Selecciona un proyecto"}
               </option>
-            ))}
-          </select>
+              {!loading &&
+                !error &&
+                proyectos.map((proyecto) => (
+                  <option
+                    key={`project-${proyecto.idProyecto}`}
+                    value={proyecto.idProyecto}
+                  >
+                    {proyecto.nombreProyecto}
+                  </option>
+                ))}
+            </select>
+          </div>
         )}
       </Field>
       <ErrorMessage name="idProyecto" component="div" className="error" />
