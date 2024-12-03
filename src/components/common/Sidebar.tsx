@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import * as SidebarIcons from "../icons/sidebar";
 import TareaForm from "../common/TareaForm";
 import { ProjectsSection } from "./sections/ProjectsSection";
+import { TodayTasksSection } from "../common/forms/TodayTaskSection";
 import "../../styles/common/Sidebar.css";
 import "../../styles/forms/forms.css";
-
 interface SidebarProps {
   onSidebarToggle: (isOpen: boolean) => void;
 }
@@ -90,11 +90,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
               Bandeja de entrada
               <span className="count">2</span>
             </li>
-            <li className="nav-item">
-              <SidebarIcons.TodayIcon className="icon" />
-              Hoy
-              <span className="count">1</span>
-            </li>
+            <TodayTasksSection />
             <li className="nav-item">
               <SidebarIcons.NextIcon className="icon" />
               Próximo
@@ -117,7 +113,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
               Explorar plantillas
             </button>
             <button className="footer-button" onClick={handleLogout}>
-              <SidebarIcons.TemplateIcon className="icon" />
+              <SidebarIcons.Logout className="icon" />
               Cerrar sesión
             </button>
           </div>

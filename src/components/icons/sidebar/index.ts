@@ -14,3 +14,12 @@ export { default as MenuIcon } from "./MenuIcon";
 export { default as DiamondIcon } from "./DiamondIcon";
 export { default as CloseIcon } from "./CloseIcon";
 export { default as CheckIcon } from "./CheckIcon";
+
+
+export { default as Clock } from "./Clock";
+export { default as Delete } from "./Delete";
+export { default as Description } from "./Description";
+export { default as Edit } from "./Edit";
+export { default as Priority } from "./Priority";
+export { default as Status } from "./Status";
+export { default as Logout } from "./Logout";
