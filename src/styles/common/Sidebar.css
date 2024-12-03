@@ -179,6 +179,52 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* Today Tasks Section Styles */
+.today-tasks-section {
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+
+.today-tasks-section .nav-item {
+  position: relative;
+  padding-right: 40px;
+}
+
+.today-tasks-section .arrow-icon {
+  position: absolute;
+  right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.today-tasks-section .arrow-icon.open {
+  transform: rotate(90deg);
+}
+
+.today-tasks-dropdown {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.today-tasks-dropdown .task-list-item {
+  margin-bottom: 8px;
+  background-color: rgba(42, 42, 42, 0.8);
+}
+
+.today-tasks-dropdown .task-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.today-tasks-dropdown .no-tasks-message {
+  padding: 16px;
+  text-align: center;
+  color: #808080;
+  background-color: transparent;
+  height: auto;
+}
+
+/* Rest of the existing styles... */
 .projects-section {
   margin-top: 20px;
 }
@@ -212,15 +258,6 @@
 
 .toggle-button:hover, .add-project-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
-}
-
-.arrow-icon {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.arrow-icon.open {
-  transform: rotate(90deg);
 }
 
 .projects-list {
@@ -305,19 +342,3 @@
     margin-top: 10px;
   }
 }
-
-@media (max-width: 480px) {
-  .sidebar-wrapper {
-    width: 100%;
-    max-width: none;
-  }
-
-  .form-row {
-    flex-direction: column;
-  }
-
-  .form-row .form-group {
-    width: 100%;
-  }
-}
-

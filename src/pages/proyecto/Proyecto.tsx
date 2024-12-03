@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import TareaService from "../../services/tarea/tareaService";
 import { Tarea } from "../../types/Tarea";
 import FormsTareas from "../../components/common/FormsTareas";
+import NoTasksMessage from "../../components/common/forms/NoTasksMessage";
 
 const Proyecto: React.FC = () => {
   const { idProyecto } = useParams<{ idProyecto: string }>();
@@ -19,6 +20,7 @@ const Proyecto: React.FC = () => {
           setTareas(tareasData);
         } catch (error) {
           console.error("Error al obtener las tareas:", error);
+          setTareas([]);
         }
       }
     };
@@ -30,9 +32,13 @@ const Proyecto: React.FC = () => {
     <div className="proyecto-container">
       <h1>Proyecto {idProyecto}</h1>
       <div className="tasks-container">
-        {tareas.map((tarea) => (
-          <FormsTareas key={tarea.idTarea} tarea={tarea} />
-        ))}
+        {tareas.length > 0 ? (
+          tareas.map((tarea) => (
+            <FormsTareas key={tarea.idTarea} tarea={tarea} />
+          ))
+        ) : (
+          <NoTasksMessage />
+        )}
       </div>
     </div>
   );
