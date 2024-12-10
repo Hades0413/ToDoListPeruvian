@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Tarea } from "../../types/Tarea";
 
-const apiUrl = "https://truthful-growth-production.up.railway.app/api/tareas";
+const apiUrl = "https://proyecto-backend2-production.up.railway.app/api/tareas";
 
 export const registrarTarea = async (tareaData: Tarea) => {
   try {
@@ -15,6 +15,21 @@ export const registrarTarea = async (tareaData: Tarea) => {
   } catch (error) {
     console.error("Error al registrar tarea:", error);
     throw error;
+  }
+};
+
+// Obtener tarea por ID
+export const obtenerTareaPorId = async (id: number) => {
+  try {
+    const response = await axios.get(`${apiUrl}/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data; // Devuelve la tarea obtenida
+  } catch (error) {
+    console.error(`Error al obtener la tarea con ID ${id}:`, error);
+    throw error; // Propaga el error si ocurre algún problema
   }
 };
 
@@ -35,6 +50,36 @@ export const obtenerTareasPorProyecto = async (idProyecto: number) => {
       `Error al obtener las tareas del proyecto ${idProyecto}:`,
       error
     );
+    throw error;
+  }
+};
+
+// Editar tarea existente
+export const editarTarea = async (id: number, tareaData: Tarea) => {
+  try {
+    const response = await axios.put(`${apiUrl}/${id}`, tareaData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error(`Error al editar la tarea con ID ${id}:`, error);
+    throw error;
+  }
+};
+
+// Eliminar tarea existente
+export const eliminarTarea = async (id: number) => {
+  try {
+    const response = await axios.delete(`${apiUrl}/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error(`Error al eliminar la tarea con ID ${id}:`, error);
     throw error;
   }
 };

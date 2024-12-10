@@ -1,6 +1,5 @@
 import Swal from "sweetalert2";
 
-// Mostrar alertas de error
 export const showErrorAlert = (message: string) => {
   Swal.fire({
     title: "Error",
@@ -11,8 +10,8 @@ export const showErrorAlert = (message: string) => {
   });
 };
 
-// Manejo de errores de API para tareas
-export const handleProyectoErrorResponse = (error: any) => {
+// Manejo de errores de API para proyectos
+export const handleProyectoErrorResponse = (error: any): string => {
   const errorMessages: Record<string, string> = {
     "El nombre de la tarea es obligatorio.":
       "Por favor, ingresa un nombre para la tarea.",
@@ -25,7 +24,8 @@ export const handleProyectoErrorResponse = (error: any) => {
   const serverMessage = error.response?.data?.message || "";
   const errorMessage =
     errorMessages[serverMessage] ||
-    "Hubo un error desconocido al registrar la tarea. Intenta nuevamente.";
+    "Hubo un error desconocido al registrar el proyecto. Intenta nuevamente.";
 
-  showErrorAlert(errorMessage);
+  console.error("Error del servidor:", serverMessage || errorMessage);
+  return errorMessage;
 };

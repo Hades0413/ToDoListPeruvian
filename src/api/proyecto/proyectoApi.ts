@@ -2,8 +2,9 @@ import axios from "axios";
 import { Proyecto } from "../../types/Proyecto";
 
 const apiUrl =
-  "https://truthful-growth-production.up.railway.app/api/proyectos";
+  "https://proyecto-backend2-production.up.railway.app/api/proyectos";
 
+// Función para registrar un proyecto
 export const registrarProyecto = async (proyectoData: Proyecto) => {
   try {
     const response = await axios.post(`${apiUrl}/registrar`, proyectoData, {
@@ -13,11 +14,22 @@ export const registrarProyecto = async (proyectoData: Proyecto) => {
     });
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error al registrar proyecto:", error);
-    throw error;
+
+    // Extrae el mensaje de error detallado del servidor
+    const serverMessage = error.response?.data || "Error desconocido";
+
+    // Valida si el error es por proyecto duplicado
+    if (serverMessage.includes("Duplicate entry")) {
+      throw new Error("Ya existe un proyecto con ese nombre.");
+    }
+
+    // Lanza cualquier otro error
+    throw new Error(serverMessage);
   }
 };
+
 
 // Función para listar proyectos del usuario
 export const listarProyecto = async () => {

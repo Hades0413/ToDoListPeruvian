@@ -1,6 +1,6 @@
 import {
   registrarProyecto,
-  listarProyecto
+  listarProyecto,
 } from "../../api/proyecto/proyectoApi";
 import { Proyecto } from "../../types/Proyecto";
 import { handleProyectoErrorResponse } from "./proyectoHelpers";
@@ -11,9 +11,10 @@ export class ProyectoService {
       const response = await registrarProyecto(proyectoData);
       return response.data;
     } catch (error) {
-      console.error("Error al crear la proyecto en el servicio:", error);
-      handleProyectoErrorResponse(error);
-      throw error;
+      console.error("Error al crear el proyecto en el servicio:", error);
+      const errorMessage = handleProyectoErrorResponse(error); // Captura el mensaje
+      console.error("Mensaje final del error:", errorMessage); // Registra el mensaje en consola
+      throw new Error(errorMessage); // Puedes lanzarlo si necesitas manejarlo en otro nivel
     }
   }
 
@@ -24,14 +25,11 @@ export class ProyectoService {
       return proyectos;
     } catch (error) {
       console.error("Error al obtener los proyectos:", error);
-      handleProyectoErrorResponse(error);
-      throw error;
+      const errorMessage = handleProyectoErrorResponse(error); // Captura el mensaje
+      console.error("Mensaje final del error:", errorMessage); // Registra el mensaje en consola
+      throw new Error(errorMessage); // Opcional
     }
   }
 }
-
-
-
-
 
 export default ProyectoService;

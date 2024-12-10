@@ -1,4 +1,3 @@
-
 # TodoListPeruvian
 
 ¡Bienvenido al proyecto **TodoListPeruvian**! Este es un proyecto de gestión de tareas realizado con **Node.js**, **React**, y **Vite**, enfocado en la usabilidad y la conectividad con una API backend. El objetivo principal es proporcionar a los usuarios una aplicación para gestionar y organizar sus tareas diarias de forma fácil y eficiente.
@@ -15,12 +14,9 @@
 - [Licencia](#licencia)
 - [Imágenes y Videos](#imágenes-y-videos)
 
-
-
 ## Descripción del Proyecto
 
 **TodoListPeruvian** es una aplicación web que permite a los usuarios registrarse, iniciar sesión y gestionar sus tareas diarias. La aplicación está desarrollada utilizando **React** con **Vite** como bundler, cuenta con validaciones en el frontend y se integra con una API backend para gestionar usuarios y sus tareas.
-
 
 ## Tecnologías Utilizadas
 
@@ -42,7 +38,6 @@ Este proyecto utiliza las siguientes tecnologías y herramientas:
 - **React Icons:** Biblioteca de iconos para React que se utiliza para añadir iconos en la interfaz de usuario.
 
 ## Estructura del Proyecto
-
 
 La estructura del proyecto incluye los siguientes directorios principales:
 
@@ -177,11 +172,10 @@ La estructura del proyecto incluye los siguientes directorios principales:
     └── vite.config.ts
 
 ```
+
 ## Instalación y Ejecución
 
-
 Para comenzar a trabajar con TodoListPeruvian, sigue estos pasos:
-
 
 ### 1. Clonar el repositorio
 
@@ -192,15 +186,17 @@ git clone https://github.com/jorgejacinto9701/pid_20246__miercoles_grupo_02_part
 ```
 
 ### 2. Instalar Dependencias
+
 Navega al directorio del proyecto y ejecuta el siguiente comando para instalar todas las dependencias:
 
 ```bash
 npm install
 ```
 
-
 ### 3. Ejecutar el Proyecto
+
 Para iniciar el servidor de desarrollo y ver el proyecto en acción, usa:
+
 ```
 npm run dev
 ```
@@ -210,12 +206,10 @@ Esto levantará la aplicación en modo de desarrollo, y podrás acceder a ella e
 ```bash
  http://localhost:5173
 ```
-  (por defecto).
 
-
+(por defecto).
 
 ## Uso
-
 
 La aplicación permite gestionar tareas. Los usuarios pueden:
 
@@ -223,27 +217,23 @@ Iniciar sesión: Usando su correo o nombre de usuario y contraseña.
 Registrar una nueva cuenta: Completar el formulario con los datos del usuario (nombre, apellido, email, username, contraseña).
 Ver el Dashboard: Una vez logueado, el usuario podrá acceder a su página principal donde podrá ver y gestionar sus tareas.
 
-
-
 ## Contribuyentes
-
 
 ```bash
 Claudia Yhadira Sifuentes Zevallos (Desarrollador principal) ("H" de humo)
 Eduardo Miguel Jaime Gomero  (Desarrollador principal)
 ```
+
 ## API y Autenticación
 
-
 Este proyecto se conecta con una API para la autenticación de usuarios. Aquí te mostramos cómo se estructura la API y los tipos de datos que se envían:
-
 
 ```bash
 import axios from "axios";
 import { User } from "../../types/User";
 
 // URL base para tu API
-const apiUrl = "https://truthful-growth-production.up.railway.app/api/user";
+const apiUrl = "https://proyecto-backend2-production.up.railway.app/api/user";
 
 // Función para Login
 export const login = async (loginRequest: {
@@ -271,7 +261,6 @@ export const register = async (userData: User) => {
 };
 ```
 
-
 Ejemplo de datos para registro:
 
 ```bash
@@ -284,7 +273,6 @@ Ejemplo de datos para registro:
   "password": "lechuga123"
 }
 ```
-
 
 ## Licencia
 
@@ -303,8 +291,10 @@ A continuación, se muestran algunas imágenes del formulario de autenticación 
 5. ![Sidebar Responsive](public/img/README/5.png)
 6. ![Página Principal](public/img/README/6.png)
 
-
 Videos:
 Demo del Proyecto:
 Cómo ejecutar el Proyecto:
+
+```
+
 ```

@@ -1,5 +1,6 @@
 export interface Tarea {
   idTarea?: number;
+  idUsuario?: number;
   idProyecto: number;
   nombre: string;
   descripcion: string;

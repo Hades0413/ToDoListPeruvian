@@ -1,4 +1,5 @@
-import React from "react";
+// Archivo: TaskDetailsModal.tsx
+import React, { useState } from "react";
 import { Tarea } from "../../../types/Tarea";
 import {
   CloseIcon,
@@ -11,16 +12,54 @@ import {
 } from "../../icons/sidebar";
 import { formatDate } from "../../../utils/dateUtils";
 import { getPriorityClass, getStatusClass } from "../../../utils/taskUtils";
+import Swal from "sweetalert2";
+import TareaService from "../../../services/tarea/tareaService"; // Asegúrate de que esta ruta sea correcta
+import TareaEditForm from "../TareaEditForm";
 
 interface TaskDetailsModalProps {
   tarea: Tarea;
   onClose: () => void;
+  onEdit: (tarea: Tarea) => void; // Añadir la función onEdit como prop
 }
 
 const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
   tarea,
   onClose,
+  onEdit,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleDelete = async (id: number) => {
+    try {
+      const tareaService = new TareaService();
+      await tareaService.deleteTarea(id);
+      Swal.fire("Eliminada", "La tarea ha sido eliminada.", "success");
+      onClose();
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
+      Swal.fire("Error", "Hubo un problema al eliminar la tarea.", "error");
+    }
+  };
+
+  if (isEditing) {
+    return (
+      <TareaEditForm
+        onClose={() => setIsEditing(false)}
+        tareaId={tarea.idTarea ?? 0}
+        onSave={(updatedTask) => {
+          setIsEditing(false);
+          onEdit(updatedTask);
+        }}
+      />
+    );
+  }
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    onEdit(tarea);  // Aquí pasas la tarea completa
+  };
+  
+
   return (
     <div className="task-modal">
       <div className="task-modal-header">
@@ -59,8 +98,9 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
             : "Activo"}
         </div>
       </div>
+
       <div className="task-info">
-        <TodayIcon className="task-info-icon  task-icon" />
+        <TodayIcon className="task-info-icon task-icon" />
         <span className="task-info-label">Fecha de creación</span>
         <div className="task-info-value">{formatDate(tarea.fechaCreacion)}</div>
       </div>
@@ -74,11 +114,32 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
       </div>
 
       <div className="task-modal-actions">
-        <button className="task-action-button update-button">
+        <button
+          className="task-action-button update-button"
+          onClick={handleEdit}
+        >
           <Edit />
           Editar
         </button>
-        <button className="task-action-button delete-button">
+
+        <button
+          className="task-action-button delete-button"
+          onClick={() => {
+            const id = tarea.idTarea ?? 0;
+            Swal.fire({
+              title: `¿Estás seguro de eliminar la tarea "${tarea.nombre}"?`,
+              text: `ID: ${id}`,
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Sí, eliminar",
+              cancelButtonText: "No, cancelar",
+            }).then((result) => {
+              if (result.isConfirmed && id !== 0) {
+                handleDelete(id);
+              }
+            });
+          }}
+        >
           <Delete />
           Eliminar
         </button>

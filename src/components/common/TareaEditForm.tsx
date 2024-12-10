@@ -15,20 +15,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Swal from "sweetalert2";
 
-interface TareaFormProps {
+interface TareaEditFormProps {
   onClose: () => void;
-  projectId?: number;
+  tareaId: number;
+  onSave: (updatedTask: Tarea) => void; // Función para manejar la tarea actualizada
 }
 
 interface TareaFormValues extends Omit<Tarea, "idProyecto"> {
   idProyecto: number;
 }
 
-const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
+const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave }) => {
   const [showPrioritySelect, setShowPrioritySelect] = useState(false);
   const [showStateSelect, setShowStateSelect] = useState(false);
   const [showDateSelect, setShowDateSelect] = useState(false);
   const [proyectos, setProyectos] = useState<Proyecto[]>([]);
+  const [tareaData, setTareaData] = useState<Tarea | null>(null);
 
   const tareaService = new TareaService();
   const proyectoService = new ProyectoService();
@@ -43,8 +45,22 @@ const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
       }
     };
 
+    const fetchTareaData = async () => {
+      try {
+        const tarea = await tareaService.getTareaPorId(tareaId);
+        setTareaData(tarea);
+      } catch (error) {
+        console.error("Error al obtener la tarea:", error);
+      }
+    };
+
     fetchProyectos();
-  }, []);
+    fetchTareaData();
+  }, [tareaId]);
+
+  if (!tareaData) {
+    return <p>Cargando...</p>;
+  }
 
   const validationSchema = Yup.object({
     idProyecto: Yup.number()
@@ -64,55 +80,118 @@ const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
       .oneOf([1, 2, 3], "Estado no válido")
       .required("El estado es obligatorio"),
     fechaVencimiento: Yup.date()
-      .min(
-        new Date(),
-        "La fecha de vencimiento no puede ser anterior a la fecha actual"
-      )
+      .min(new Date(), "La fecha de vencimiento no puede ser anterior a hoy")
       .required("La fecha de vencimiento es obligatoria"),
   });
 
   const handleSubmit = async (
     values: TareaFormValues,
-    { setSubmitting, setStatus }: any
+    { setSubmitting }: any
   ) => {
     try {
+      // Verificar si el usuario está autenticado
       const idUsuario = localStorage.getItem("userId");
       if (!idUsuario) {
         console.error("Usuario no autenticado");
-        return;
-      }
-      if (!idUsuario) {
         Swal.fire({
-          title: "Error",
-          text: "No se encontró un usuario autenticado.",
+          title: "No estás autenticado",
           icon: "error",
           confirmButtonText: "Aceptar",
           background: "#333",
           color: "#fff",
         });
-        setSubmitting(false);
-        return;
+        return; // Salir si no está autenticado
       }
 
+      // Verificar si la tareaId es válida
+      if (!tareaId) {
+        console.error("ID de tarea no disponible");
+        Swal.fire({
+          title: "ID de tarea no válido",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+          background: "#333",
+          color: "#fff",
+        });
+        return; // Salir si no hay tareaId
+      }
+
+      // Construir el objeto con el usuario
       const tareaConUsuario = { ...values, idUsuario: parseInt(idUsuario, 10) };
 
-      await tareaService.createTarea(tareaConUsuario);
+      // Imprimir los datos antes de enviarlos para depuración
+      console.log("Datos a actualizar:", tareaConUsuario);
 
-      Swal.fire({
-        title: "Tarea registrada correctamente",
-        icon: "success",
-        confirmButtonText: "Aceptar",
-        background: "#333",
-        color: "#fff",
-      });
+      // Verificación de los datos
+      if (!tareaConUsuario || Object.keys(tareaConUsuario).length === 0) {
+        console.error("No hay datos para actualizar");
+        Swal.fire({
+          title: "No hay datos válidos para actualizar",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+          background: "#333",
+          color: "#fff",
+        });
+        return; // Salir si no hay datos
+      }
 
-      window.location.reload();
-      setStatus({ success: "Tarea creada correctamente" });
-      onClose();
-    } catch (error) {
-      console.error("Error al crear la tarea:", error);
-      setStatus({ error: "Error al crear la tarea. Intenta nuevamente." });
+      // Enviar la solicitud de actualización
+      const response = await tareaService.updateTarea(tareaId, tareaConUsuario);
+
+      // Verificar la respuesta
+      if (response && response.success) {
+        // Mostrar mensaje de éxito
+        Swal.fire({
+          title: "Tarea actualizada correctamente",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+          background: "#333",
+          color: "#fff",
+        });
+
+        // Llamar a la función onSave para actualizar la tarea en el estado del componente padre
+        onSave(response.data); // Asegúrate de que la respuesta contenga los datos actualizados de la tarea
+
+        // Cerrar el formulario
+        onClose();
+      } else {
+        console.error("Error al actualizar la tarea: Respuesta no válida");
+        Swal.fire({
+          title: "Error al actualizar la tarea",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+          background: "#333",
+          color: "#fff",
+        });
+      }
+    } catch (error: unknown) {
+      // Verificar si el error es una instancia de Error
+      if (error instanceof Error) {
+        console.error("Error al actualizar la tarea:", error.message);
+
+        // Mostrar un mensaje de error en la interfaz de usuario
+        Swal.fire({
+          title: "Ocurrió un error inesperado",
+          icon: "error",
+          text: error.message || "No se pudo actualizar la tarea.",
+          confirmButtonText: "Aceptar",
+          background: "#333",
+          color: "#fff",
+        });
+      } else {
+        // Si no es una instancia de Error, manejar de forma genérica
+        console.error("Error desconocido:", error);
+        Swal.fire({
+          title: "Ocurrió un error inesperado",
+          icon: "error",
+          text: "No se pudo actualizar la tarea.",
+          confirmButtonText: "Aceptar",
+          background: "#333",
+          color: "#fff",
+        });
+      }
     } finally {
+      // Terminar el estado de "enviando"
       setSubmitting(false);
     }
   };
@@ -123,15 +202,25 @@ const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
     setShowDateSelect(false);
   };
 
-  const initialValues: TareaFormValues = {
-    idProyecto: projectId || 0,
-    nombre: "",
-    descripcion: "",
-    prioridad: 1,
-    estado: 1,
-    fechaVencimiento: new Date().toISOString().split("T")[0],
-    idUsuario: Number(localStorage.getItem("idUsuario")) || 0,
-  };
+  const initialValues: TareaFormValues = tareaData
+    ? {
+        idProyecto: tareaData.idProyecto,
+        nombre: tareaData.nombre,
+        descripcion: tareaData.descripcion,
+        prioridad: tareaData.prioridad,
+        estado: tareaData.estado,
+        fechaVencimiento: tareaData.fechaVencimiento.split("T")[0], // Formatear correctamente la fecha
+        idUsuario: Number(localStorage.getItem("idUsuario")) || 0,
+      }
+    : {
+        idProyecto: 0,
+        nombre: "",
+        descripcion: "",
+        prioridad: 1,
+        estado: 1,
+        fechaVencimiento: "",
+        idUsuario: 0,
+      };
 
   return (
     <AnimatePresence>
@@ -302,4 +391,4 @@ const TareaForm: React.FC<TareaFormProps> = ({ onClose, projectId }) => {
   );
 };
 
-export default TareaForm;
+export default TareaEditForm;

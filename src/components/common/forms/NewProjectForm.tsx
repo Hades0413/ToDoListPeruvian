@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import * as SidebarIcons from "../../icons/sidebar";
 import { Proyecto } from "../../../types/Proyecto";
-import { registrarProyecto } from "../../../api/proyecto/proyectoApi";
+import { registrarProyecto } from "../../../api/proyecto/proyectoApi";import Swal from "sweetalert2";
 
 interface NewProjectFormProps {
   onClose: () => void;
@@ -36,13 +36,19 @@ export function NewProjectForm({ onClose, onSubmit }: NewProjectFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const idUsuario = localStorage.getItem("userId");
     if (!idUsuario) {
-      console.error("Usuario no autenticado");
+      Swal.fire({
+        title: "Error",
+        text: "Usuario no autenticado. Por favor, inicia sesión nuevamente.",
+        icon: "error",
+        background: "#333",
+        color: "#fff",
+      });
       return;
     }
-
+  
     const proyectoData: Proyecto = {
       idUsuario: Number(idUsuario),
       nombreProyecto: formData.nombre,
@@ -50,15 +56,27 @@ export function NewProjectForm({ onClose, onSubmit }: NewProjectFormProps) {
       prioridad: Number(formData.prioridad),
       fechaVencimiento: formData.fecha_vencimiento,
     };
-
+  
     try {
       await registrarProyecto(proyectoData);
       onSubmit(proyectoData);
       onClose();
-    } catch (error) {
-      console.error("Error al registrar proyecto:", error);
+    } catch (error: any) {
+      const errorMessage = error.message || "Error desconocido al registrar el proyecto.";
+  
+      // Mostrar el error en Swal
+      Swal.fire({
+        title: "Error al registrar proyecto",
+        text: errorMessage,
+        icon: "error",
+        background: "#333",
+        color: "#fff",
+      });
+  
+      console.error("Error al registrar proyecto:", errorMessage); // Opcional: mantener el log en consola para depuración
     }
   };
+  
 
   const today = new Date().toISOString().split("T")[0];
   const maxDate = "2050-12-31";
