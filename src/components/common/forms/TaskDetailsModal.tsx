@@ -1,4 +1,3 @@
-// Archivo: TaskDetailsModal.tsx
 import React, { useState } from "react";
 import { Tarea } from "../../../types/Tarea";
 import {
@@ -13,13 +12,13 @@ import {
 import { formatDate } from "../../../utils/dateUtils";
 import { getPriorityClass, getStatusClass } from "../../../utils/taskUtils";
 import Swal from "sweetalert2";
-import TareaService from "../../../services/tarea/tareaService"; // Asegúrate de que esta ruta sea correcta
+import TareaService from "../../../services/tarea/tareaService";
 import TareaEditForm from "../TareaEditForm";
 
 interface TaskDetailsModalProps {
   tarea: Tarea;
   onClose: () => void;
-  onEdit: (tarea: Tarea) => void; // Añadir la función onEdit como prop
+  onEdit: (tarea: Tarea) => void;
 }
 
 const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
@@ -56,9 +55,8 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
 
   const handleEdit = () => {
     setIsEditing(true);
-    onEdit(tarea);  // Aquí pasas la tarea completa
+    onEdit(tarea);
   };
-  
 
   return (
     <div className="task-modal">

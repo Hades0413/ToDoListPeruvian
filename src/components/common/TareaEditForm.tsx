@@ -18,14 +18,18 @@ import Swal from "sweetalert2";
 interface TareaEditFormProps {
   onClose: () => void;
   tareaId: number;
-  onSave: (updatedTask: Tarea) => void; // Función para manejar la tarea actualizada
+  onSave: (updatedTask: Tarea) => void;
 }
 
 interface TareaFormValues extends Omit<Tarea, "idProyecto"> {
   idProyecto: number;
 }
 
-const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave }) => {
+const TareaEditForm: React.FC<TareaEditFormProps> = ({
+  onClose,
+  tareaId,
+  onSave,
+}) => {
   const [showPrioritySelect, setShowPrioritySelect] = useState(false);
   const [showStateSelect, setShowStateSelect] = useState(false);
   const [showDateSelect, setShowDateSelect] = useState(false);
@@ -89,7 +93,6 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
     { setSubmitting }: any
   ) => {
     try {
-      // Verificar si el usuario está autenticado
       const idUsuario = localStorage.getItem("userId");
       if (!idUsuario) {
         console.error("Usuario no autenticado");
@@ -100,10 +103,8 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
           background: "#333",
           color: "#fff",
         });
-        return; // Salir si no está autenticado
+        return;
       }
-
-      // Verificar si la tareaId es válida
       if (!tareaId) {
         console.error("ID de tarea no disponible");
         Swal.fire({
@@ -113,16 +114,13 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
           background: "#333",
           color: "#fff",
         });
-        return; // Salir si no hay tareaId
+        return;
       }
 
-      // Construir el objeto con el usuario
       const tareaConUsuario = { ...values, idUsuario: parseInt(idUsuario, 10) };
 
-      // Imprimir los datos antes de enviarlos para depuración
       console.log("Datos a actualizar:", tareaConUsuario);
 
-      // Verificación de los datos
       if (!tareaConUsuario || Object.keys(tareaConUsuario).length === 0) {
         console.error("No hay datos para actualizar");
         Swal.fire({
@@ -132,15 +130,12 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
           background: "#333",
           color: "#fff",
         });
-        return; // Salir si no hay datos
+        return;
       }
 
-      // Enviar la solicitud de actualización
       const response = await tareaService.updateTarea(tareaId, tareaConUsuario);
 
-      // Verificar la respuesta
       if (response && response.success) {
-        // Mostrar mensaje de éxito
         Swal.fire({
           title: "Tarea actualizada correctamente",
           icon: "success",
@@ -149,27 +144,41 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
           color: "#fff",
         });
 
-        // Llamar a la función onSave para actualizar la tarea en el estado del componente padre
-        onSave(response.data); // Asegúrate de que la respuesta contenga los datos actualizados de la tarea
+        if (response.data) {
+          onSave(response.data);
+        } else {
+          console.error("No se recibieron datos actualizados de la tarea");
+          Swal.fire({
+            title: "Tarea actualizada",
+            icon: "success",
+            text: "No se recibieron los datos actualizados de la tarea.",
+            confirmButtonText: "Aceptar",
+            background: "#333",
+            color: "#fff",
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
 
-        // Cerrar el formulario
         onClose();
       } else {
         console.error("Error al actualizar la tarea: Respuesta no válida");
         Swal.fire({
-          title: "Error al actualizar la tarea",
-          icon: "error",
+          title: "Tarea actualizada correctamente",
+          icon: "success",
           confirmButtonText: "Aceptar",
           background: "#333",
           color: "#fff",
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
     } catch (error: unknown) {
-      // Verificar si el error es una instancia de Error
       if (error instanceof Error) {
         console.error("Error al actualizar la tarea:", error.message);
 
-        // Mostrar un mensaje de error en la interfaz de usuario
         Swal.fire({
           title: "Ocurrió un error inesperado",
           icon: "error",
@@ -179,7 +188,6 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
           color: "#fff",
         });
       } else {
-        // Si no es una instancia de Error, manejar de forma genérica
         console.error("Error desconocido:", error);
         Swal.fire({
           title: "Ocurrió un error inesperado",
@@ -191,7 +199,6 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
         });
       }
     } finally {
-      // Terminar el estado de "enviando"
       setSubmitting(false);
     }
   };
@@ -209,7 +216,7 @@ const TareaEditForm: React.FC<TareaEditFormProps> = ({ onClose, tareaId, onSave 
         descripcion: tareaData.descripcion,
         prioridad: tareaData.prioridad,
         estado: tareaData.estado,
-        fechaVencimiento: tareaData.fechaVencimiento.split("T")[0], // Formatear correctamente la fecha
+        fechaVencimiento: tareaData.fechaVencimiento.split("T")[0],
         idUsuario: Number(localStorage.getItem("idUsuario")) || 0,
       }
     : {

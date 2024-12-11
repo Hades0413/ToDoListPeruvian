@@ -26,10 +26,10 @@ export const obtenerTareaPorId = async (id: number) => {
         "Content-Type": "application/json",
       },
     });
-    return response.data; // Devuelve la tarea obtenida
+    return response.data;
   } catch (error) {
     console.error(`Error al obtener la tarea con ID ${id}:`, error);
-    throw error; // Propaga el error si ocurre algún problema
+    throw error;
   }
 };
 
