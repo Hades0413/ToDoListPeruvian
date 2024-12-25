@@ -233,7 +233,7 @@ import axios from "axios";
 import { User } from "../../types/User";
 
 // URL base para tu API
-const apiUrl = "https://proyecto-backend2-production.up.railway.app/api/user";
+const apiUrl = "https://todolistperuvianbackend-production.up.railway.app/api/user";
 
 // Función para Login
 export const login = async (loginRequest: {

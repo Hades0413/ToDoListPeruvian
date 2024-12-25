@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Tarea } from "../../types/Tarea";
 
-const apiUrl = "https://proyecto-backend2-production.up.railway.app/api/tareas";
+const apiUrl =
+  "https://todolistperuvianbackend-production.up.railway.app/api/tareas";
 
 export const registrarTarea = async (tareaData: Tarea) => {
   try {
