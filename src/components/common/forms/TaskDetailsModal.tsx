@@ -40,22 +40,23 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
     }
   };
 
+  // Si está en modo de edición, renderizamos el formulario de edición
   if (isEditing) {
     return (
       <TareaEditForm
         onClose={() => setIsEditing(false)}
         tareaId={tarea.idTarea ?? 0}
         onSave={(updatedTask) => {
-          setIsEditing(false);
-          onEdit(updatedTask);
+          setIsEditing(false);  // Cerramos el formulario de edición
+          onEdit(updatedTask);  // Enviamos la tarea actualizada al componente padre
         }}
       />
     );
   }
 
+  // Manejo de la edición cuando el usuario hace clic en editar
   const handleEdit = () => {
-    setIsEditing(true);
-    onEdit(tarea);
+    setIsEditing(true);  // Activamos el modo de edición
   };
 
   return (
@@ -114,7 +115,7 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
       <div className="task-modal-actions">
         <button
           className="task-action-button update-button"
-          onClick={handleEdit}
+          onClick={handleEdit}  // Cambia el estado a edición
         >
           <Edit />
           Editar

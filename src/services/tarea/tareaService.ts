@@ -25,7 +25,7 @@ class TareaService {
   // Obtener tarea por ID
   async getTareaPorId(id: number) {
     try {
-      const tarea = await obtenerTareaPorId(id);
+      const tarea = await obtenerTareaPorId(id); // Llamamos a la función para obtener la tarea por ID
       return tarea;
     } catch (error) {
       console.error(`Error al obtener la tarea con ID ${id}:`, error);

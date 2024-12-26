@@ -31,13 +31,27 @@ const Proyecto: React.FC = () => {
     fetchTareas();
   }, [idProyecto]);
 
+  // Función para manejar la edición de una tarea
+  const handleEditTarea = (updatedTarea: Tarea) => {
+    // Aquí puedes actualizar el estado de las tareas o hacer una llamada al backend
+    setTareas((prevTareas) =>
+      prevTareas.map((tarea) =>
+        tarea.idTarea === updatedTarea.idTarea ? updatedTarea : tarea
+      )
+    );
+  };
+
   return (
     <div className="proyecto-container">
       <h1>{nombreProyecto}</h1>
       <div className="tasks-container">
         {tareas.length > 0 ? (
           tareas.map((tarea) => (
-            <FormsTareas key={tarea.idTarea} tarea={tarea} />
+            <FormsTareas
+              key={tarea.idTarea}
+              tarea={tarea}
+              onEdit={handleEditTarea}
+            />
           ))
         ) : (
           <NoTasksMessage />

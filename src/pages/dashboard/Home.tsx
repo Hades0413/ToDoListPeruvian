@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as Icons from "../../components/icons/sidebar";
 import TareaForm from "../../components/common/TareaForm";
 import "../../styles/dashboard/Home.css";
