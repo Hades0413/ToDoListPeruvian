@@ -33,7 +33,11 @@ const Error404: React.FC = () => {
             Lo sentimos, no pudimos encontrar la página que buscas. Te invitamos
             a volver al inicio para continuar explorando.
           </p>
-          <Link to="/home" className="error-home-button">
+          <Link
+            to="/home"
+            className="error-home-button"
+            aria-label="IR A INICIO"
+          >
             IR A INICIO
             <ArrowRight size={20} strokeWidth={2} />
           </Link>

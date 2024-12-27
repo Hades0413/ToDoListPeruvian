@@ -53,6 +53,7 @@ export function TaskFormButtons({
       <button
         type="button"
         className="task-action-button"
+        aria-label="onDateClick"
         onClick={onDateClick}
       >
         <Icons.TodayIcon className="icon" />
@@ -61,6 +62,7 @@ export function TaskFormButtons({
       <button
         type="button"
         className="task-action-button"
+        aria-label="Prioridad"
         onClick={onPriorityClick}
         style={{ color: getPriorityColor(currentPriority) }}
       >
@@ -70,6 +72,7 @@ export function TaskFormButtons({
       <button
         type="button"
         className="task-action-button"
+        aria-label="Estado"
         onClick={onStateClick}
         style={{ color: getStateColor(currentState) }}
       >

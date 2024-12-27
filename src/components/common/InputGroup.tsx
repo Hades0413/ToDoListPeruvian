@@ -52,6 +52,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
         <button
           type="button"
           className="input-icon-right"
+          aria-label="onRightIconClick"
           onClick={onRightIconClick}
         >
           {rightIcon}

@@ -123,11 +123,12 @@ export function ProjectsSection() {
           <button
             ref={addButtonRef}
             className="add-project-button"
+            aria-label="Nuevo Proyecto"
             onClick={handleAddProjectClick}
           >
             <SidebarIcons.PlusIcon className="icon" />
           </button>
-          <button className="toggle-button">
+          <button className="toggle-button" aria-label="Nuevo">
             <SidebarIcons.ArrowIcon
               className={`arrow-icon ${isProjectsOpen ? "open" : ""}`}
             />
@@ -139,6 +140,7 @@ export function ProjectsSection() {
         <InitialProjectPopup
           buttonRef={addButtonRef}
           ref={popupRef}
+          aria-label="Nuevo Proyecto"
           onClose={() => setShowInitialPopup(false)}
           onProjectClick={() => {
             setShowInitialPopup(false);

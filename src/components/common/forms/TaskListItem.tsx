@@ -18,10 +18,16 @@ const TaskListItem: React.FC<TaskListItemProps> = ({
       <div className="task-list-header">
         <div className="task-list-name">{tarea.nombre}</div>
         <div className="task-list-actions">
-          <button className="task-action-button update-button">
+          <button
+            className="task-action-button update-button"
+            aria-label="Edit"
+          >
             <Edit />
           </button>
-          <button className="task-action-button delete-button">
+          <button
+            className="task-action-button delete-button"
+            aria-label="Delete"
+          >
             <Delete />
           </button>
         </div>

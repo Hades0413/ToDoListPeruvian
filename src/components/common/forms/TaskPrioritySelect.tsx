@@ -21,7 +21,7 @@ export function TaskPrioritySelect({
     <div className="priority-select">
       <div className="priority-select-header">
         <span>Prioridad</span>
-        <button type="button" onClick={onClose}>
+        <button type="button" aria-label="Prioridad" onClick={onClose}>
           <Icons.CloseIcon className="icon" />
         </button>
       </div>
@@ -30,6 +30,7 @@ export function TaskPrioritySelect({
           <button
             key={priority.id}
             type="button"
+            aria-label="Prioridad"
             className={`priority-option ${
               currentPriority === priority.id ? "selected" : ""
             }`}

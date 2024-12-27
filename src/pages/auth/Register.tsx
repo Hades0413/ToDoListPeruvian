@@ -155,13 +155,17 @@ const Register: React.FC = () => {
                   placeholder="Contraseña"
                   icon={<FaLock />}
                 />
-                <button type="submit" className="auth-button">
+                <button
+                  type="submit"
+                  className="auth-button"
+                  aria-label="Regístrarse"
+                >
                   Registrarse
                 </button>
               </Form>
             )}
           </Formik>
-          <a href="/" className="auth-link">
+          <a href="/" className="auth-link" aria-label="Inicia sesión">
             ¿Ya tienes una cuenta? Inicia sesión
           </a>
         </div>

@@ -22,10 +22,7 @@ export default function Home() {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
-  const [currentProjectId] = useState<
-    number | undefined
-  >();
-
+  const [currentProjectId] = useState<number | undefined>();
 
   const handleTaskComplete = (taskId: number) => {
     const taskToComplete = tasks.find((task) => task.id === taskId);
@@ -48,11 +45,11 @@ export default function Home() {
             <span className="task-count">{filteredTasks.length} tareas</span>
           </div>
           <div className="header-right">
-            <button className="header-button">
+            <button className="header-button" aria-label="Vista">
               <Icons.FiltersIcon className="icon" />
               <span>Vista</span>
             </button>
-            <button className="header-button">
+            <button className="header-button" aria-label="Ordenar">
               <Icons.MenuIcon className="icon" />
               <span>Ordenar</span>
             </button>
@@ -64,6 +61,7 @@ export default function Home() {
             <div key={task.id} className="task-item">
               <button
                 className="task-checkbox"
+                aria-label="handleTaskComplete"
                 onClick={() => handleTaskComplete(task.id)}
               >
                 <Icons.CheckIcon className="icon" />
@@ -86,6 +84,7 @@ export default function Home() {
             <button
               onClick={() => setShowTaskForm(true)}
               className="add-task-button"
+              aria-label="Añadir tarea"
             >
               <Icons.PlusIcon className="icon" />
               Añadir tarea

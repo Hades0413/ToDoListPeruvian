@@ -83,13 +83,17 @@ export default function Login() {
                     Recuérdame
                   </label>
                 </div>
-                <button type="submit" className="auth-button">
+                <button
+                  type="submit"
+                  className="auth-button"
+                  aria-label="Iniciar sesión"
+                >
                   Iniciar sesión
                 </button>
               </Form>
             )}
           </Formik>
-          <a href="/register" className="auth-link">
+          <a href="/register" className="auth-link" aria-label="Regístrate">
             ¿No tienes una cuenta? Regístrate
           </a>
         </div>

@@ -47,8 +47,8 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
         onClose={() => setIsEditing(false)}
         tareaId={tarea.idTarea ?? 0}
         onSave={(updatedTask) => {
-          setIsEditing(false);  // Cerramos el formulario de edición
-          onEdit(updatedTask);  // Enviamos la tarea actualizada al componente padre
+          setIsEditing(false); // Cerramos el formulario de edición
+          onEdit(updatedTask); // Enviamos la tarea actualizada al componente padre
         }}
       />
     );
@@ -56,14 +56,14 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
 
   // Manejo de la edición cuando el usuario hace clic en editar
   const handleEdit = () => {
-    setIsEditing(true);  // Activamos el modo de edición
+    setIsEditing(true); // Activamos el modo de edición
   };
 
   return (
     <div className="task-modal">
       <div className="task-modal-header">
         <h2 className="task-modal-title">{tarea.nombre}</h2>
-        <button className="close-button" onClick={onClose}>
+        <button className="close-button" aria-label="onClose" onClick={onClose}>
           <CloseIcon />
         </button>
       </div>
@@ -115,7 +115,8 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
       <div className="task-modal-actions">
         <button
           className="task-action-button update-button"
-          onClick={handleEdit}  // Cambia el estado a edición
+          aria-label="Editar"
+          onClick={handleEdit} // Cambia el estado a edición
         >
           <Edit />
           Editar
@@ -123,6 +124,7 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
 
         <button
           className="task-action-button delete-button"
+          aria-label="Eliminar"
           onClick={() => {
             const id = tarea.idTarea ?? 0;
             Swal.fire({

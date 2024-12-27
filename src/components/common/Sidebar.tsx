@@ -60,7 +60,11 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
               </div>
               <div className="icons">
                 <SidebarIcons.BellIcon className="notification-icon" />
-                <button className="menu-button" onClick={toggleSidebar}>
+                <button
+                  className="menu-button"
+                  aria-label="toggleSidebar"
+                  onClick={toggleSidebar}
+                >
                   <SidebarIcons.MenuIcon className="menu-icon" />
                 </button>
               </div>
@@ -69,6 +73,7 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
 
           <button
             className="add-task-button-sidebar"
+            aria-label="handleAddTaskClick"
             onClick={handleAddTaskClick}
           >
             <SidebarIcons.PlusIcon className="icon" />
@@ -104,15 +109,19 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
           <ProjectsSection />
 
           <div className="sidebar-footer">
-            <button className="footer-button">
+            <button className="footer-button" aria-label="Añadir un equipo">
               <SidebarIcons.PlusIcon className="icon" />
               Añadir un equipo
             </button>
-            <button className="footer-button">
+            <button className="footer-button" aria-label="Explorar plantillas">
               <SidebarIcons.TemplateIcon className="icon" />
               Explorar plantillas
             </button>
-            <button className="footer-button" onClick={handleLogout}>
+            <button
+              className="footer-button"
+              aria-label="Cerrar sesión"
+              onClick={handleLogout}
+            >
               <SidebarIcons.Logout className="icon" />
               Cerrar sesión
             </button>
@@ -120,12 +129,18 @@ export default function Sidebar({ onSidebarToggle }: SidebarProps) {
         </nav>
       </div>
       {!isSidebarOpen && (
-        <button className="floating-menu-button" onClick={toggleSidebar}>
+        <button
+          className="floating-menu-button"
+          aria-label="toggleSidebar"
+          onClick={toggleSidebar}
+        >
           <SidebarIcons.MenuIcon className="menu-icon" />
         </button>
       )}
 
-      {isFormOpen && <TareaForm onClose={handleCloseForm} />}
+      {isFormOpen && (
+        <TareaForm onClose={handleCloseForm} aria-label="handleCloseForm" />
+      )}
     </div>
   );
 }

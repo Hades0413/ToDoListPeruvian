@@ -14,7 +14,7 @@ export function TaskDateSelect({
     <div className="priority-select date-select">
       <div className="priority-select-header">
         <span>Fecha de vencimiento</span>
-        <button type="button" onClick={onClose}>
+        <button type="button" aria-label="onClose" onClick={onClose}>
           <X className="icon" />
         </button>
       </div>

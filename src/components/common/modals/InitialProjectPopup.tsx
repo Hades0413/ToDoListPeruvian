@@ -54,7 +54,11 @@ export const InitialProjectPopup = forwardRef<
           <span className="popup-title">Añadir proyecto</span>
           <span className="popup-subtitle">Planifica y asigna tareas</span>
         </div>
-        <button className="popup-close-button" onClick={handleClose}>
+        <button
+          className="popup-close-button"
+          aria-label="X"
+          onClick={handleClose}
+        >
           X
         </button>
       </div>

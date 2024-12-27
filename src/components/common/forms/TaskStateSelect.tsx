@@ -22,7 +22,7 @@ export function TaskStateSelect({
     <div className="priority-select state-select">
       <div className="priority-select-header">
         <span>Estado</span>
-        <button type="button" onClick={onClose}>
+        <button type="button" aria-label="Estado" onClick={onClose}>
           <Icons.CloseIcon className="icon" />
         </button>
       </div>
@@ -31,6 +31,7 @@ export function TaskStateSelect({
           <button
             key={state.id}
             type="button"
+            aria-label="Prioridad"
             className={`priority-option ${
               currentState === state.id ? "selected" : ""
             }`}
