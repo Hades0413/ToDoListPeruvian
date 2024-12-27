@@ -18,24 +18,49 @@ interface Task extends TaskData {
   id: number;
 }
 
+interface Project {
+  id: number;
+  nombre: string;
+}
+
 export default function Home() {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
-  const [currentProjectId, setCurrentProjectId] = useState<
-    number | undefined
-  >();
+  const [currentProjectId, setCurrentProjectId] = useState<number | undefined>(
+    undefined
+  );
 
+  // Lista simulada de proyectos
+  const projects: Project[] = [
+    { id: 1, nombre: "Proyecto A" },
+    { id: 2, nombre: "Proyecto B" },
+    { id: 3, nombre: "Proyecto C" },
+  ];
+
+  // Función para manejar el envío del formulario de tarea
   const handleTaskSubmit = (taskData: TaskData) => {
+    // Validar que los datos esenciales están presentes
+    if (!taskData.nombre || !taskData.prioridad || !taskData.estado) {
+      alert("Por favor, complete todos los campos requeridos.");
+      return;
+    }
+
+    // Crear una nueva tarea
     const newTask: Task = {
-      id: Date.now(),
+      id: Date.now(), // Genera un ID único usando la fecha actual (en un entorno real esto lo gestionaría el backend)
       ...taskData,
-      idProyecto: currentProjectId || taskData.idProyecto,
+      idProyecto: currentProjectId || taskData.idProyecto, // Asigna el idProyecto, si no hay proyecto actual, usa el idProyecto de la tarea
     };
+
+    // Actualizar el estado de las tareas
     setTasks([...tasks, newTask]);
+
+    // Cerrar el formulario
     setShowTaskForm(false);
   };
 
+  // Función para manejar el marcado de tareas completadas
   const handleTaskComplete = (taskId: number) => {
     const taskToComplete = tasks.find((task) => task.id === taskId);
     if (taskToComplete) {
@@ -44,6 +69,7 @@ export default function Home() {
     }
   };
 
+  // Filtrar las tareas según el proyecto seleccionado
   const filteredTasks = tasks.filter((task) =>
     currentProjectId ? task.idProyecto === currentProjectId : true
   );
@@ -68,6 +94,21 @@ export default function Home() {
           </div>
         </header>
 
+        {/* Selector de proyectos */}
+        <div className="project-selector">
+          <select
+            onChange={(e) => setCurrentProjectId(Number(e.target.value))}
+            value={currentProjectId || ""}
+          >
+            <option value="">Selecciona un proyecto</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="home-content">
           {filteredTasks.map((task) => (
             <div key={task.id} className="task-item">
@@ -89,7 +130,7 @@ export default function Home() {
           {showTaskForm ? (
             <TareaForm
               onClose={() => setShowTaskForm(false)}
-              projectId={currentProjectId}
+              projectId={currentProjectId} // Pasamos el projectId como prop
             />
           ) : (
             <button
