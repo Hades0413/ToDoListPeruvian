@@ -69,7 +69,7 @@ const Register: React.FC = () => {
           style={{ backgroundImage: `url(${authFormImg})` }}
         ></div>
         <div className="auth-form">
-          <h2 className="auth-title">Crea una cuenta</h2>
+          <h1 className="auth-title">Crea una cuenta</h1>
           <Formik
             initialValues={{
               nombre: "",

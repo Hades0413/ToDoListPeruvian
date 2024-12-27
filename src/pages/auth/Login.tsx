@@ -46,7 +46,7 @@ export default function Login() {
           style={{ backgroundImage: `url(${authFormImg})` }}
         ></div>
         <div className="auth-form">
-          <h2 className="auth-title">Bienvenido de vuelta</h2>
+          <h1 className="auth-title">Bienvenido de vuelta</h1>
           <Formik
             initialValues={{
               login: localStorage.getItem("rememberedEmail") || "",
