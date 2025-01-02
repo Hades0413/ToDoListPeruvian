@@ -4,7 +4,6 @@ import Register from "./pages/auth/Register";
 import Home from "./pages/dashboard/Home";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/protected/ProtectedRoute";
-import Error404 from "./pages/errors/Error404";
 import Proyecto from "./pages/proyecto/Proyecto";
 
 function App() {
@@ -34,7 +33,6 @@ function App() {
             }
           />
         </Route>
-        <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>
   );
