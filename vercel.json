@@ -23,6 +23,10 @@
       "dest": "/public/robots.txt"
     },
     {
+      "src": "/google011e34c1780b4151.html",
+      "dest": "/public/google011e34c1780b4151.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
